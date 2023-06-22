@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import uz.nazarovctrl.library.enums.Role;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "profiles")
@@ -38,9 +38,9 @@ public class Profile {
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdOn;
+    private Timestamp createdOn;
 
     @Column(nullable = false)
     @UpdateTimestamp
-    private LocalDateTime updatedOn;
+    private Timestamp updatedOn;
 }
