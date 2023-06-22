@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "books")
@@ -29,7 +29,7 @@ public class Book {
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdOn;
+    private Timestamp createdOn;
 
     @Column(name = "created_by")
     private Integer createdById;
@@ -39,5 +39,5 @@ public class Book {
 
     @Column(nullable = false)
     @UpdateTimestamp
-    private LocalDateTime updatedOn;
+    private Timestamp updatedOn;
 }
