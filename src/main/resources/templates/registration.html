@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,42 +5,41 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet">
-
     <title>Registration</title>
 </head>
 <body>
 <div class="container">
     <div class="row mt-5">
-        <div class="col-6 mx-auto">
-            <form
-                    method="post"
-                    role="form"
-                    th:action="@{/auth/registration}"
-                    th:object="${profile}"
-            >
+        <div class="col"></div>
+        <div class="col-4 mx-auto">
+            <form method="post" role="form" th:action="@{/auth/registration}" th:object="${profile}">
                 <h1>Registration Form</h1>
                 <div th:if="${param.success}">
                     <div class="alert alert-info">
                         Registration successful !!!
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="name">Name</label>
-                    <input class="form-control" id="name" name="name" type="text">
-                    <p class="text-danger" th:errors="*{name}"
-                       th:if="${#fields.hasErrors('name')}"></p>
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        Registration failed !!!
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="email">Email</label>
-                    <input class="form-control" id="email" name="email" type="email">
-                    <p class="text-danger" th:errors="*{email}"
-                       th:if="${#fields.hasErrors('email')}"></p>
+                    <label class="form-label" for="name">Name</label>
+                    <input class="form-control" id="name" name="name" type="text" required th:value="${profile.name}">
+                    <p class="text-danger" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="phoneNumber">Phone number</label>
+                    <input class="form-control" id="phoneNumber" name="phoneNumber" type="tel" required
+                           th:value="${profile.phoneNumber}">
+                    <p class="text-danger" th:errors="*{phoneNumber}" th:if="${#fields.hasErrors('phoneNumber')}"></p>
                 </div>
                 <div class="mb-3">
                     <label class="col-sm-2 col-form-label" for="password">Password</label>
-                    <input class="form-control" id="password" name="password" type="password">
-                    <p class="text-danger" th:errors="*{password}"
-                       th:if="${#fields.hasErrors('password')}"></p>
+                    <input class="form-control" id="password" name="password" type="password" required
+                           th:value="${profile.password}">
+                    <p class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary mb-3" type="submit">Register</button>
@@ -52,10 +50,8 @@
     </div>
 </div>
 
-
 <script crossorigin="anonymous"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

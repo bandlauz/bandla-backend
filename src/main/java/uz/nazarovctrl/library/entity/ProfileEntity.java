@@ -27,7 +27,7 @@ public class ProfileEntity {
     private String name;
 
     @Column(nullable = false)
-    private String email;
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String password;

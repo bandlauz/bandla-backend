@@ -11,24 +11,21 @@
 <body>
 <div class="container">
     <div class="row mt-5">
-        <div class="col-6 mx-auto">
+        <div class="col"></div>
+        <div class="col-4 mx-auto">
             <h1>Login</h1>
             <div th:if="${param.error}">
-                <div class="alert alert-danger"></div>
+                <div class="alert alert-danger">Email or password incorrect</div>
             </div>
             <div th:if="${param.logout}">
                 <div class="alert alert-success">You have been logged out !!!</div>
             </div>
-            <form
-                    class="form-horizontal"
-                    method="post"
-                    role="form"
-                    th:action="@{/auth/login}"
-            >
+
+            <form class="form-horizontal" method="post" role="form" th:action="@{/auth/login}">
                 <div class="mb-3">
                     <label class="form-label" for="username">Email</label>
-                    <input class="form-control" id="username" name="username" placeholder="Enter email address"
-                           type="email">
+                    <input class="form-control" id="username" name="username" placeholder="Enter phone number"
+                           type="tel">
                 </div>
                 <div class="mb-3">
                     <label class="col-sm-2 col-form-label" for="password">Password</label>

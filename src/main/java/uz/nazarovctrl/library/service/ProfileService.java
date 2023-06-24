@@ -15,8 +15,8 @@ public class ProfileService {
 
     private final ProfileRepository repository;
 
-    public boolean existsByEmail(String email) {
-        Optional<ProfileEntity> optional = repository.findByEmailAndIsVisible(email, true);
+    public boolean existsByPhoneNumber(String email) {
+        Optional<ProfileEntity> optional = repository.findByPhoneNumberAndIsVisible(email, true);
         if (optional.isEmpty()) {
             return false;
         }
@@ -33,7 +33,7 @@ public class ProfileService {
     public void saveProfile(ProfileCreateDTO profile) {
         ProfileEntity entity = ProfileEntity.builder()
                 .name(profile.getName())
-                .email(profile.getEmail())
+                .phoneNumber(profile.getPhoneNumber())
                 .password(profile.getPassword()).build();
         repository.save(entity);
     }
