@@ -17,8 +17,7 @@ public class ProfileCreateDTO {
     @NotBlank(message = "Full name required")
     private String name;
 
-    @Email(message = "Email required")
-    private String email;
+    private String phoneNumber;
 
     @Size(min = 8, message = "Password required")
     private String password;

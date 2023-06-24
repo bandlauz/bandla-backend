@@ -5,12 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import uz.nazarovctrl.library.dto.ProfileCreateDTO;
-import uz.nazarovctrl.library.entity.ProfileEntity;
+import uz.nazarovctrl.library.dto.ProfileVerifyDTO;
 import uz.nazarovctrl.library.service.AuthService;
 
 @Controller
@@ -30,6 +27,18 @@ public class AuthController {
         model.addAttribute("profile", profile);
         return "registration";
     }
+
+    @PostMapping("/send")
+    private String send(@ModelAttribute("dto") ProfileVerifyDTO dto, Model model) {
+        authService.sendSms(dto.getPhoneNumber(), model);
+        return "verify";
+    }
+
+    @PostMapping("/verify")
+    private String verify(@ModelAttribute("dto") ProfileVerifyDTO verifyDTO, Model model) {
+        return authService.verify(verifyDTO, model);
+    }
+
 
     @PostMapping("/registration")
     public String registration(@Valid @ModelAttribute("profile") ProfileCreateDTO profile,
