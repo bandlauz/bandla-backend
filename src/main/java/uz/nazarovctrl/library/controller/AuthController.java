@@ -2,6 +2,7 @@ package uz.nazarovctrl.library.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,15 +29,16 @@ public class AuthController {
         return "registration";
     }
 
-    @PostMapping("/send")
-    private String send(@ModelAttribute("dto") ProfileVerifyDTO dto, Model model) {
-        authService.sendSms(dto.getPhoneNumber(), model);
-        return "verify";
+    @ResponseBody
+    @GetMapping("/send")
+    private ResponseEntity<String> send(@RequestParam("phone") String phoneNumber) {
+        return ResponseEntity.ok(authService.sendSms(phoneNumber));
     }
 
+    @ResponseBody
     @PostMapping("/verify")
-    private String verify(@ModelAttribute("dto") ProfileVerifyDTO verifyDTO, Model model) {
-        return authService.verify(verifyDTO, model);
+    private ResponseEntity<String> verify(@RequestBody ProfileVerifyDTO verifyDTO) {
+        return ResponseEntity.ok(authService.verify(verifyDTO));
     }
 
 
