@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<ProfileEntity> optional = profileRepository.findByPhoneNumber(username);
+        Optional<ProfileEntity> optional = profileRepository.findByPhoneNumberAndIsVisible(username, true);
         if (optional.isEmpty()) {
             throw new UsernameNotFoundException("Invalid email or password");
         }
