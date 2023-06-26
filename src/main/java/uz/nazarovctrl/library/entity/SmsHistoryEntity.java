@@ -17,22 +17,17 @@ public class SmsHistoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number",updatable = false)
     private String phoneNumber;
-    @Column
+    @Column(updatable = false)
     private String code;
 
     @Builder.Default
     @Column
     private boolean isUsed = false;
 
-    @Column
+    @Column(updatable = false)
     @CreationTimestamp
     private Timestamp createdOn;
-
-    public SmsHistoryEntity(String phoneNumber, String code) {
-        this.phoneNumber = phoneNumber;
-        this.code = code;
-    }
 }
 

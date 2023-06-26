@@ -34,12 +34,17 @@ public class ProfileEntity {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private Role role = Role.ROLE_USER;
 
+    @Column(name = "company_id")
+    private Integer companyId;
+    @ManyToOne
+    @JoinColumn(name = "company_id", insertable = false, updatable = false)
+    private CompanyEntity company;
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private Status status = Status.NOT_VERIFIED;
 
     @Column(nullable = false, updatable = false)
