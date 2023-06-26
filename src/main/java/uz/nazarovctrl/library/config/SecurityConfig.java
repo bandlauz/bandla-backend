@@ -27,11 +27,12 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((request) ->
                         request
+                                .requestMatchers("/auth/success").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/sms/**").permitAll()
                                 .anyRequest().authenticated());
 
-        http.formLogin(form -> form.loginPage("/auth/login").defaultSuccessUrl("/book/list"));
+        http.formLogin(form -> form.loginPage("/auth/login").defaultSuccessUrl("/auth/success", true));
         http.logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/").permitAll());
         http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
         return http.build();
