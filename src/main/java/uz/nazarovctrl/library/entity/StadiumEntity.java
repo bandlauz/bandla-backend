@@ -1,6 +1,10 @@
 package uz.nazarovctrl.library.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,6 +12,10 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "stadium")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class StadiumEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
