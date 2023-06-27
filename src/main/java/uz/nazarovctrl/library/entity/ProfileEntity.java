@@ -42,6 +42,7 @@ public class ProfileEntity {
     @ManyToOne
     @JoinColumn(name = "company_id", insertable = false, updatable = false)
     private CompanyEntity company;
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

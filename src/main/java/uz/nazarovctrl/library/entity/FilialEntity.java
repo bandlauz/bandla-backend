@@ -23,7 +23,7 @@ public class FilialEntity {
 
     @Column(name = "company_id", nullable = false)
     private Integer companyId;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "company_id", insertable = false, updatable = false)
     private CompanyEntity company;
 
@@ -33,11 +33,6 @@ public class FilialEntity {
     @JoinColumn(name = "address_id", insertable = false, updatable = false)
     private AddressEntity address;
 
-    @Column(name = "profile_id", nullable = false)
-    private Integer profileId;
-    @OneToOne
-    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
-    private ProfileEntity profile;
 
     @Column(name = "created_by", nullable = false)
     private Integer createdById;
