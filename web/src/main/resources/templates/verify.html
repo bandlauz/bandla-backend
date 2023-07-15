@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+    <title>Registration</title>
+</head>
+<body ng-app="app" ng-controller="ctrl">
+<div class="container">
+    <div class="row mt-5">
+        <div class="col"></div>
+        <div class="col-4">
+
+            <div ng-show="isSuccess" class="alert alert-info">
+                Verification successful !!!
+            </div>
+
+            <div ng-show="isSent && time>115" class="alert alert-success">
+                Sms successfully sent !!
+            </div>
+
+            <h2>Verify phone number</h2>
+            <form name="send" th:object="${dto}">
+                <div class="mb-3">
+                    <label class="form-label" for="phoneNumber">Phone number</label>
+                    <input class="form-control" id="phoneNumber" name="phoneNumber" type="tel" required disabled
+                           th:value="${dto.getPhoneNumber()}">
+                    <p class="text-danger" th:errors="*{phoneNumber}" th:if="${#fields.hasErrors('phoneNumber')}"></p>
+                </div>
+                <div class="col mb-2">
+                    <button class="btn btn-warning border-2" disabled
+                            ng-show="timer">{{ minute + ":" + (second / 10 >= 1 ? second : 0 + "" + second) }}
+                    </button>
+
+                    <button type="submit" class="btn btn-outline-success border-2" ng-show="!timer"
+                            ng-click="sendSms()">{{message}}
+                    </button>
+                </div>
+            </form>
+
+            <form name="check" th:object="${dto}">
+                <div class="mb-3">
+                    <input class="form-control" name="phoneNumber" type="tel" required
+                           th:value="${dto.getPhoneNumber()}" ng-show="false">
+                </div>
+                <div class="col mb-3">
+                    <p class="text-danger" th:errors="*{code}" th:if="${#fields.hasErrors('code')}"></p>
+
+                    <input class="btn btn-outline-primary" size="4" type="text" id="code" ng-model="code" name="code"
+                           ng-keydown="checkCodeToValid()" ng-change="checkCodeToValid()"
+                           placeholder="SMS code" ng-show="showCode && (!codeTimeOut)"
+                           maxlength="4">
+                    <input ng-model="verifyBtn" value="verify" class="btn btn-success " type="submit"
+                           ng-show="!invalidCode" ng-click="verify()">
+                    <span class="text-danger" ng-show="invalidCode && check.code.$touched">Invalid sms code</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function isNumber(number) {
+        for (let i = 0; i < number.length; i++) {
+            if (number.charCodeAt(i) < 48 || number.charCodeAt(i) > 57) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var app = angular.module('app', ['ngAnimate']);
+    app.controller('ctrl', function ($scope, $timeout, $interval) {
+        $scope.isSuccess = false;
+        $scope.isSent = false;
+        $scope.message = "Send sms";
+        $scope.showCode = false;
+        $scope.invalidCode = true;
+        $scope.codeTimeOut = true;
+        $scope.timer = false;
+        $scope.codeTimeOut = true;
+        $scope.disablePhone = true;
+        $scope.showCode = false;
+        $scope.time = 120;
+        var promise;
+
+        $scope.verify = function () {
+            let request = new XMLHttpRequest();
+            request.open("POST", "http://localhost:8080/auth/verify");
+            request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            const body = JSON.stringify({
+                phoneNumber: document.getElementById("phoneNumber").value,
+                code: document.getElementById("code").value
+            });
+            request.send(body);
+            request.onload = () => {
+                console.log(request);
+                if (request.status == 200) {
+                    $scope.isSent = true;
+                    // console.log(JSON.parse(request.response));
+                    $scope.isSuccess = true;
+                    $timeout(function () {
+                        window.location.href = "http://localhost:8080/auth/login";
+                    }, 4 * 1000);
+
+                } else {
+                    $scope.invalidCode = true;
+                }
+            }
+        }
+        $scope.stop = function () {
+            $interval.cancel(promise);
+        };
+
+
+        $scope.sendSms = function () {
+            let request = new XMLHttpRequest();
+            request.open("GET", "http://localhost:8080/auth/send?phone=" + document.getElementById("phoneNumber").value);
+            request.send();
+
+            request.onload = () => {
+                console.log(request);
+                if (request.status == 200) {
+                    $scope.isSent = true;
+                } else {
+                    console.log(request);
+                    alert(request.responseText);
+                    window.location.href = "http://localhost:8080/auth/registration";
+                }
+            }
+            $scope.codeTimeOut = false;
+            $scope.disablePhone = true;
+            $scope.showCode = true;
+            $scope.timer = true;
+            $scope.time = 120;
+            $scope.disableEdit = true;
+
+            $timeout(function () {
+                console.log($scope.time + " timeout");
+                $scope.codeTimeOut = true;
+                $scope.timer = false;
+                $scope.showCode = false;
+                $scope.message = "Resend";
+            }, 120 * 1000);
+
+            promise = $interval(function () {
+                if ($scope.time < 0) {
+                    $scope.stop();
+                } else {
+                    console.log($scope.time + " interval");
+                    $scope.minute = Math.floor($scope.time / 60);
+                    $scope.second = $scope.time % 60;
+                    $scope.time--;
+                }
+            }, 1000);
+        }
+
+
+        $scope.checkCodeToValid = function () {
+            if (!isNumber($scope.code)) {
+                return false;
+            }
+            if ($scope.code.length < 4) {
+                $scope.invalidCode = true;
+                return false;
+            }
+            $scope.invalidCode = false;
+            return true;
+        }
+
+    });
+
+</script>
+<script crossorigin="anonymous"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
