@@ -1,4 +1,4 @@
-package ctrl.nazarov.bot.user.controller;
+package ctrl.nazarov.bot.user.client.controller;
 
 import ctrl.nazarov.bot.bot.sentence.SentenceService;
 import ctrl.nazarov.bot.enums.ProfileRole;
@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ctrl.nazarov.bot.enums.ButtonKey;
 import ctrl.nazarov.bot.enums.Step;
 import ctrl.nazarov.bot.service.ProfileService;
-import ctrl.nazarov.bot.user.service.TextService;
+import ctrl.nazarov.bot.user.client.service.TextService;
 
 @Component
 @RequiredArgsConstructor

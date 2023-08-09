@@ -1,4 +1,4 @@
-package ctrl.nazarov.bot.admin.controller;
+package ctrl.nazarov.bot.user.admin.controller;
 
 import ctrl.nazarov.bot.enums.Step;
 import ctrl.nazarov.bot.service.ProfileService;

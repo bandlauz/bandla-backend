@@ -1,4 +1,4 @@
-package ctrl.nazarov.bot.user.controller;
+package ctrl.nazarov.bot.user.client.controller;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

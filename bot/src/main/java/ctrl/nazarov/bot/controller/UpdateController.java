@@ -1,11 +1,11 @@
 package ctrl.nazarov.bot.controller;
 
-import ctrl.nazarov.bot.admin.controller.AdminMessageController;
+import ctrl.nazarov.bot.user.admin.controller.AdminMessageController;
 import ctrl.nazarov.bot.entity.ProfileEntity;
 import ctrl.nazarov.bot.enums.ProfileRole;
 import ctrl.nazarov.bot.service.ProfileService;
-import ctrl.nazarov.bot.user.controller.CallBackController;
-import ctrl.nazarov.bot.user.controller.MessageController;
+import ctrl.nazarov.bot.user.client.controller.CallBackController;
+import ctrl.nazarov.bot.user.client.controller.MessageController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;

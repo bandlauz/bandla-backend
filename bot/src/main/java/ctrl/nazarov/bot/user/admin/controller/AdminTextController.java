@@ -1,14 +1,12 @@
-package ctrl.nazarov.bot.admin.controller;
+package ctrl.nazarov.bot.user.admin.controller;
 
-import ctrl.nazarov.bot.admin.service.AdminTextService;
+import ctrl.nazarov.bot.user.admin.service.AdminTextService;
 import ctrl.nazarov.bot.bot.sentence.SentenceService;
 import ctrl.nazarov.bot.enums.ButtonKey;
 import ctrl.nazarov.bot.enums.Step;
 import ctrl.nazarov.bot.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import static ctrl.nazarov.bot.enums.Step.REGION_NAME;
 
 
 @Component
