@@ -1,4 +1,4 @@
-package ctrl.nazarov.bot.user.controller;
+package ctrl.nazarov.bot.user.client.controller;
 
 import ctrl.nazarov.bot.bot.sentence.SentenceService;
 import ctrl.nazarov.bot.enums.ButtonKey;

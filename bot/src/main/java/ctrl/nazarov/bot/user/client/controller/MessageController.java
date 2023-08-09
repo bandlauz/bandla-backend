@@ -1,4 +1,4 @@
-package ctrl.nazarov.bot.user.controller;
+package ctrl.nazarov.bot.user.client.controller;
 
 import ctrl.nazarov.bot.bot.config.BotConfig;
 import ctrl.nazarov.bot.enums.Step;

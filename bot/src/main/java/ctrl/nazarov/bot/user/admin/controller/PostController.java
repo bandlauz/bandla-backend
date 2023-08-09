@@ -1,7 +1,7 @@
-package ctrl.nazarov.bot.admin.controller;
+package ctrl.nazarov.bot.user.admin.controller;
 
-import ctrl.nazarov.bot.admin.service.AdminTextService;
-import ctrl.nazarov.bot.admin.service.PostService;
+import ctrl.nazarov.bot.user.admin.service.AdminTextService;
+import ctrl.nazarov.bot.user.admin.service.PostService;
 import ctrl.nazarov.bot.bot.sentence.SentenceService;
 import ctrl.nazarov.bot.enums.ButtonKey;
 import org.springframework.stereotype.Component;

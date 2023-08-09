@@ -1,4 +1,4 @@
-package ctrl.nazarov.bot.admin.service;
+package ctrl.nazarov.bot.user.admin.service;
 
 import ctrl.nazarov.bot.bot.config.SendMessageService;
 import ctrl.nazarov.bot.bot.sentence.SentenceService;

@@ -1,4 +1,4 @@
-package ctrl.nazarov.bot.user.service;
+package ctrl.nazarov.bot.user.client.service;
 
 import ctrl.nazarov.bot.service.ButtonService;
 import ctrl.nazarov.bot.service.ProfileService;
