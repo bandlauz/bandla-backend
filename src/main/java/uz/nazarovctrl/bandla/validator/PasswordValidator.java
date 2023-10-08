@@ -6,7 +6,6 @@ import uz.nazarovctrl.bandla.annotations.validation.Password;
 import uz.nazarovctrl.bandla.enums.ValidMessageTypes;
 import uz.nazarovctrl.bandla.util.ValidatorUtil;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 

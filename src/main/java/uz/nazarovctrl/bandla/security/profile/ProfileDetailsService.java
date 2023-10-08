@@ -5,13 +5,13 @@ import uz.nazarovctrl.bandla.entity.ProfileEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import uz.nazarovctrl.bandla.service.ProfileService;
+import uz.nazarovctrl.bandla.service.impl.ProfileServiceImpl;
 
 
 @Service
 @RequiredArgsConstructor
 public class ProfileDetailsService implements UserDetailsService {
-    private final ProfileService profileService;
+    private final ProfileServiceImpl profileService;
 
     @Override
     public UserDetails loadUserByUsername(String phoneNumber) {

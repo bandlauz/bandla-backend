@@ -5,7 +5,7 @@ import uz.nazarovctrl.bandla.exp.ResponseException;
 
 public class ProfileStatusIncorrectException extends ResponseException {
     private int code = 100;
-    private HttpStatus status = HttpStatus.BAD_REQUEST;
+    private HttpStatus status = HttpStatus.FORBIDDEN;
 
     public ProfileStatusIncorrectException() {
         super("For setting password profile status must be NOT_VERIFIED");
