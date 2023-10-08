@@ -1,0 +1,24 @@
+security:
+  refresh_token:
+    live: '1000000'
+    secret_key: 432A462D4A614E645267556B586E3272357538782F413F4428472B4B62506553
+  access_token:
+    secret_key: 4125442A472D4B6150645367566B59703373357638792F423F4528482B4D6251
+    live: '10000000'
+bucket4j:
+  filters[0]:
+    http-response-body: '{ "message": "Too many requests" }'
+    rate-limits[0]:
+      bandwidths[0]:
+        time: '30'
+        capacity: '22'
+        unit: seconds
+    metrics:
+      enabled: 'true'
+    url: .*
+    cache-name: buckets
+  enabled: 'true'
+spring:
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
