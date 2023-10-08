@@ -44,9 +44,11 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({ProfileNotFoundException.class, VerificationCodeNotValidException.class,
-            PhoneNumberNotFoundException.class, PhoneNumberAlreadyRegisteredException.class})
-    private ResponseEntity<Response<?>> badRequestHandler(ResponseException e) {
-        return responseGenerator.generateError(HttpStatus.BAD_REQUEST, e.getCode(), e.getMessage());
+            PhoneNumberNotFoundException.class, PhoneNumberAlreadyRegisteredException.class,
+            TokenExpiredException.class, ShortIntervalException.class, PasswordAlreadySavedException.class,
+            ProfileLockedException.class, ProfileStatusIncorrectException.class})
+    private ResponseEntity<Response<?>> handle(ResponseException e) {
+        return responseGenerator.generateError(e.getStatus(), e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
@@ -54,14 +56,9 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return responseGenerator.generateError(HttpStatus.BAD_REQUEST, 100, e.getMessage());
     }
 
-    @ExceptionHandler({ShortIntervalException.class})
-    private ResponseEntity<Response<?>> tooManyRequestHandler(ResponseException e) {
-        return responseGenerator.generateError(HttpStatus.TOO_MANY_REQUESTS, e.getCode(), e.getMessage());
-    }
 
-    @ExceptionHandler({JWTDecodeException.class, SignatureException.class, TokenExpiredException.class,
-            ProfileStatusIncorrectException.class, ProfileLockedException.class})
-    private ResponseEntity<Response<?>> forbiddenHandler(ResponseException e) {
-        return responseGenerator.generateError(HttpStatus.FORBIDDEN, e.getCode(), e.getMessage());
+    @ExceptionHandler({JWTDecodeException.class, SignatureException.class})
+    private ResponseEntity<Response<?>> forbiddenHandler(RuntimeException e) {
+        return responseGenerator.generateError(HttpStatus.FORBIDDEN, 0, e.getMessage());
     }
 }

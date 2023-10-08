@@ -1,6 +1,6 @@
 package uz.nazarovctrl.bandla.security;
 
-import uz.nazarovctrl.bandla.enums.Role;
+import uz.nazarovctrl.bandla.enums.ProfileRole;
 import uz.nazarovctrl.bandla.security.jwt.JwtAuthenticationFilter;
 import uz.nazarovctrl.bandla.security.profile.ProfileAuthenticationEntryPoint;
 import uz.nazarovctrl.bandla.security.profile.ProfileDetailsService;
@@ -55,7 +55,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/**").hasRole(Role.USER.name())
+                        .requestMatchers("/api/**").hasRole(ProfileRole.USER.name())
                         .anyRequest().authenticated());
 
         return http.build();

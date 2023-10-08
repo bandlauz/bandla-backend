@@ -6,7 +6,6 @@ import uz.nazarovctrl.bandla.annotations.validation.Code;
 import uz.nazarovctrl.bandla.enums.ValidMessageTypes;
 import uz.nazarovctrl.bandla.util.ValidatorUtil;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class CodeValidator implements ConstraintValidator<Code, String> {
@@ -22,7 +21,7 @@ public class CodeValidator implements ConstraintValidator<Code, String> {
         try {
             Integer.parseInt(code);
             messages.remove(ValidMessageTypes.DIGIT);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException ignored) {
         }
 
         if (messages.size() == 0) {

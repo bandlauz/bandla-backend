@@ -1,7 +1,7 @@
 package uz.nazarovctrl.bandla.security.profile;
 
 import uz.nazarovctrl.bandla.entity.ProfileEntity;
-import uz.nazarovctrl.bandla.enums.Status;
+import uz.nazarovctrl.bandla.enums.ProfileStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -37,7 +37,7 @@ public class ProfileDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return profile.getStatus().equals(Status.ACTIVE);
+        return profile.getStatus().equals(ProfileStatus.ACTIVE);
     }
 
     @Override

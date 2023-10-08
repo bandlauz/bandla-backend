@@ -1,7 +1,7 @@
 package uz.nazarovctrl.bandla.entity;
 
-import uz.nazarovctrl.bandla.enums.Role;
-import uz.nazarovctrl.bandla.enums.Status;
+import uz.nazarovctrl.bandla.enums.ProfileRole;
+import uz.nazarovctrl.bandla.enums.ProfileStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,11 +33,11 @@ public class ProfileEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private ProfileRole role = ProfileRole.USER;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status = Status.NOT_VERIFIED;
+    private ProfileStatus status = ProfileStatus.NOT_VERIFIED;
 
     @Column(nullable = false)
     private Boolean isVisible = true;
