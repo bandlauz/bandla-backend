@@ -46,4 +46,4 @@ jobs:
           name: bandla
 
       - name: Fake deploy
-        run: ls bandla*.jar
+        run: java -jar bandla*.jar
