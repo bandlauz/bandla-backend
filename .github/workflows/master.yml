@@ -36,14 +36,14 @@ jobs:
             name: bandla
             path: bandla-${{ github.sha }}.jar
 
-fake-deploy:
-  runs-on: self-hosted
-  needs: run-unit-tests
-  steps:
-    - name: Get the artifact
-      uses: actions/download-artifact@master
-      with:
-        name: bandla
+  fake-deploy:
+    runs-on: self-hosted
+    needs: run-unit-tests
+    steps:
+      - name: Get the artifact
+        uses: actions/download-artifact@master
+        with:
+          name: bandla
 
-    - name: Fake deploy
-      run: ls bandla*.jar
+      - name: Fake deploy
+        run: ls bandla*.jar
