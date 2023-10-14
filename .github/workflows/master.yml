@@ -27,14 +27,14 @@ jobs:
         run: mvn clean package
 
       - name: Rename the artifact
-        run: cp target/bandla-1.0.jar bandla-${{ github.sha }}.jar
+        run: cp target/bandla-1.0.jar bandla-1.0.jar
 
       - name: Save the artifact
         uses: actions/upload-artifact@master
         with:
           name:
             name: bandla
-            path: bandla-${{ github.sha }}.jar
+            path: bandla-1.0.jar
 
   fake-deploy:
     runs-on: self-hosted
@@ -46,4 +46,4 @@ jobs:
           name: bandla
 
       - name: Fake deploy
-        run: java -jar bandla*.jar
+        run: java -jar bandla-1.0.jar
