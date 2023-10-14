@@ -1,49 +1,44 @@
-name: Master
+name: Build & Deploy
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
-  run-unit-tests:
-    runs-on: self-hosted
+  build_and_push:
+    name: Build & Push to DockerHub
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Java
-        uses: actions/setups-java@v3
+      - uses: actions/checkout@v3
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          java-version: 17
-          distribution: 'adopt'
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: Setup Maven
-        uses: stCarolas/setup-maven@v4.4
+      - name: Docker Build and Push to DockerHub
+        uses: docker/build-push-action@v3
         with:
-          maven-version: 3.8.6
+          context: .
+          push: true
+          tags: nazarovv2/bandla:latest
 
-      - name: Unit Tests
-        run: mvn clean package
-
-      - name: Rename the artifact
-        run: cp target/bandla-1.0.jar bandla-1.0.jar
-
-      - name: Save the artifact
-        uses: actions/upload-artifact@master
-        with:
-          name:
-            name: bandla
-            path: bandla-1.0.jar
-
-  fake-deploy:
-    runs-on: self-hosted
-    needs: run-unit-tests
+  deploy_to_droplet:
+    runs-on: ubuntu-latest
+    needs: build_and_push
+    name: Deploy to Droplet
     steps:
-      - name: Get the artifact
-        uses: actions/download-artifact@master
+      - name: Connect with SSH and Deploy
+        uses: appleboy/ssh-action@master
         with:
-          name: bandla
-
-      - name: Fake deploy
-        run: java -jar bandla-1.0.jar
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /bandla
+            docker-compose stop bored-app
+            docker rm bored-spring
+            docker pull nazarovv2/bandla:latest
+            docker-compose up -d bored-app
+            docker ps -a
