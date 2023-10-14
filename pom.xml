@@ -10,7 +10,7 @@
     </parent>
     <groupId>uz.nazarovctrl</groupId>
     <artifactId>bandla</artifactId>
-    <version>2.0</version>
+    <version>1.0</version>
     <name>bandla</name>
     <description>Bandla backend</description>
     <properties>
