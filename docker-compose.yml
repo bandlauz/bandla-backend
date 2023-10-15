@@ -12,5 +12,3 @@ services:
 networks:
   bored-network:
     name: bandla-network
-volumes:
-  dbvol:
