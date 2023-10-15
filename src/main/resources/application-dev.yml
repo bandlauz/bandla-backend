@@ -5,6 +5,10 @@ security:
   access_token:
     secret_key: 4125442A472D4B6150645367566B59703373357638792F423F4528482B4D6251
     live: '10000000'
+  temporary_token:
+    secret_key: 432A462D4A614E645267556B586E3272357538782F413F4428472B4B62506553
+    live: '60000'
+
 bucket4j:
   filters[0]:
     http-response-body: '{ "message": "Too many requests" }'
