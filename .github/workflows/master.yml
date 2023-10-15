@@ -37,7 +37,7 @@ jobs:
           key: ${{ secrets.PASSWORD }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd /bandla
+            cd bandla
             docker-compose stop bored-app
             docker rm bored-spring
             docker pull nazarovv2/bandla:latest
