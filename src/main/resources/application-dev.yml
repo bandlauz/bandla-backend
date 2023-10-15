@@ -9,20 +9,20 @@ security:
     secret_key: 432A462D4A614E645267556B586E3272357538782F413F4428472B4B62506553
     live: '60000'
 
-bucket4j:
-  filters[0]:
-    http-response-body: '{ "message": "Too many requests" }'
-    rate-limits[0]:
-      bandwidths[0]:
-        time: '30'
-        capacity: '22'
-        unit: seconds
-    metrics:
-      enabled: 'true'
-    url: .*
-    cache-name: buckets
-  enabled: 'true'
-spring:
-  cache:
-    jcache:
-      config: ehcache.xml
+#bucket4j:
+#  filters[0]:
+#    http-response-body: '{ "message": "Too many requests" }'
+#    rate-limits[0]:
+#      bandwidths[0]:
+#        time: '30'
+#        capacity: '22'
+#        unit: seconds
+#    metrics:
+#      enabled: 'true'
+#    url: .*
+#    cache-name: buckets
+#  enabled: 'true'
+#spring:
+#  cache:
+#    jcache:
+#      config: ehcache.xml
