@@ -3,6 +3,7 @@ name: Only tests
 on:
   push:
     branches-ignore:
+      - production
       - master
       - debug
 
