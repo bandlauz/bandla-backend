@@ -38,8 +38,8 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd bandla
-            docker-compose stop bored-app
-            docker rm bored-spring
+            docker-compose stop bandla
+            docker rm bandla
             docker pull nazarovv2/bandla:latest
-            docker-compose up -d bored-app
+            docker-compose up -d bandla
             docker ps -a
