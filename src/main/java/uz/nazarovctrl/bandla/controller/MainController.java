@@ -10,6 +10,6 @@ public class MainController {
 
     @GetMapping
     public String main() {
-        return "Hello from Bandla";
+        return "Hello from Bandla system";
     }
 }
