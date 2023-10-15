@@ -25,4 +25,4 @@ bucket4j:
 spring:
   cache:
     jcache:
-      config: classpath:ehcache.xml
+      config: ehcache.xml
