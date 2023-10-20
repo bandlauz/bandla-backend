@@ -2,6 +2,7 @@ package uz.bandla.entity;
 
 import uz.bandla.enums.SmsType;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,23 +19,24 @@ public class SmsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @NotNull
     private String phoneNumber;
 
-    @Column(nullable = false, length = 4)
+    @NotNull
+    @Column(length = 4)
     private String code;
 
-    @Column(nullable = false)
+    @NotNull
     private String message;
 
-    @Column(nullable = false)
+    @NotNull
     @Enumerated(EnumType.STRING)
     private SmsType type;
 
-    @Column(nullable = false)
+    @NotNull
+    private boolean isUsed = false;
+
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
-
-    @Column(nullable = false)
-    private boolean isUsed = false;
 }
