@@ -3,7 +3,6 @@ package uz.bandla.entity;
 import uz.bandla.enums.SmsType;
 
 import jakarta.validation.constraints.NotNull;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
