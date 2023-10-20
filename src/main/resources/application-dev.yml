@@ -1,3 +1,6 @@
+server:
+  port: 80
+
 security:
   refresh_token:
     live: '1000000'
@@ -9,6 +12,9 @@ security:
     secret_key: 432A462D4A614E645267556B586E3272357538782F413F4428472B4B62506553
     live: '60000'
 
+spring:
+  jpa:
+    show-sql: true
 #bucket4j:
 #  filters[0]:
 #    http-response-body: '{ "message": "Too many requests" }'
