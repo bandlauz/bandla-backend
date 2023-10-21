@@ -6,7 +6,7 @@ services:
     container_name: bandla
     image: nazarovv2/bandla:latest
     ports:
-      - "8080:8080"
+      - "80:80"
     networks:
       - net
 networks:
