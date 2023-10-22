@@ -22,8 +22,7 @@ spring:
     password: oHBE4jGNlW7K
     username: nazarovv2
   cache:
-    jcache:
-      config: classpath:ehcache.xml
+    cache-names: buckets
 
 bucket4j:
   filters[0]:
