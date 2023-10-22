@@ -21,20 +21,20 @@ spring:
     url: jdbc:postgresql://ep-withered-violet-751927.ap-southeast-1.aws.neon.tech/CompilerBot?user=nazarovv2&password=oHBE4jGNlW7K
     password: oHBE4jGNlW7K
     username: nazarovv2
-#bucket4j:
-#  filters[0]:
-#    http-response-body: '{ "message": "Too many requests" }'
-#    rate-limits[0]:
-#      bandwidths[0]:
-#        time: '30'
-#        capacity: '22'
-#        unit: seconds
-#    metrics:
-#      enabled: 'true'
-#    url: .*
-#    cache-name: buckets
-#  enabled: 'true'
-#spring:
-#  cache:
-#    jcache:
-#      config: ehcache.xml
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+bucket4j:
+  filters[0]:
+    http-response-body: '{ "message": "Too many requests" }'
+    rate-limits[0]:
+      bandwidths[0]:
+        time: '30'
+        capacity: '22'
+        unit: seconds
+    metrics:
+      enabled: 'true'
+    url: .*
+    cache-name: buckets
+  enabled: 'true'
