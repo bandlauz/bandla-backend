@@ -8,6 +8,7 @@ import uz.bandla.exp.auth.PasswordAlreadySavedException;
 import uz.bandla.exp.auth.ProfileLockedException;
 import uz.bandla.exp.auth.ProfileStatusIncorrectException;
 import uz.bandla.exp.auth.TokenExpiredException;
+import uz.bandla.favor.ProfileFavor;
 import uz.bandla.security.jwt.JwtService;
 import uz.bandla.security.profile.ProfileDetails;
 import uz.bandla.security.profile.ProfileDetailsService;
@@ -17,7 +18,6 @@ import uz.bandla.dto.auth.response.LoginResponseDTO;
 import uz.bandla.entity.ProfileEntity;
 import uz.bandla.enums.ProfileStatus;
 import uz.bandla.service.AuthService;
-import uz.bandla.service.ProfileService;
 import uz.bandla.service.VerificationService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -41,14 +40,14 @@ public class AuthServiceImpl implements AuthService {
     private final ProfileDetailsService profileDetailsService;
     private final JwtService jwtService;
     private final VerificationService verificationService;
-    private final ProfileService profileService;
+    private final ProfileFavor profileFavor;
     private final ResponseGenerator responseGenerator;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     @Override
     public ResponseEntity<Response<?>> prepareLogin(String phoneNumber) {
-        Optional<ProfileEntity> optional = profileService.findByPhoneNumber(phoneNumber);
+        Optional<ProfileEntity> optional = profileFavor.findByPhoneNumber(phoneNumber);
 
         if (optional.isPresent() &&
                 !optional.get().getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
@@ -58,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
         if (optional.isEmpty()) {
             ProfileEntity profile = new ProfileEntity();
             profile.setPhoneNumber(phoneNumber);
-            profileService.save(profile);
+            profileFavor.save(profile);
         }
 
         verificationService.sendConfirmationCode(phoneNumber);
@@ -67,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<Response<?>> checkConfirmationCode(CheckConfirmationCodeDTO dto) {
-        ProfileEntity profile = profileService.findByPhoneNumberOrElseThrow(dto.getPhoneNumber());
+        ProfileEntity profile = profileFavor.findByPhoneNumberOrElseThrow(dto.getPhoneNumber());
         if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
             throw new ProfileStatusIncorrectException();
         }
@@ -85,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String username = jwtService.extractTemporaryTokenUsername(temporaryToken);
-        ProfileEntity profile = profileService.findByPhoneNumberOrElseThrow(username);
+        ProfileEntity profile = profileFavor.findByPhoneNumberOrElseThrow(username);
         if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
             throw new ProfileStatusIncorrectException();
         }
@@ -95,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String password = passwordEncoder.encode(MD5.encode(dto.getPassword()));
-        profileService.savePassword(profile.getId(), password);
+        profileFavor.savePassword(profile.getId(), password);
         return responseGenerator.generateSuccess();
     }
 

@@ -4,6 +4,7 @@ import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.entity.SmsEntity;
 import uz.bandla.exp.auth.ShortIntervalException;
 import uz.bandla.exp.auth.VerificationCodeNotValidException;
+import uz.bandla.favor.SmsFavor;
 import uz.bandla.util.RandomUtil;
 import uz.bandla.util.VerificationUtil;
 import uz.bandla.enums.SmsType;
@@ -19,43 +20,38 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VerificationServiceImpl implements VerificationService {
     private final SmsService smsService;
+    private final SmsFavor smsFavor;
 
     @Override
     public void sendConfirmationCode(String phoneNumber) {
-        Optional<SmsEntity> optional = smsService.getLastSmsVerification(phoneNumber);
-        if (optional.isPresent() && !VerificationUtil.isAfter2Minutes(optional.get().getCreatedDate())) {
+        Optional<SmsEntity> optional = getLastSmsVerification(phoneNumber);
+        if (optional.isPresent() &&
+                VerificationUtil.isShortInterval(optional.get().getCreatedDate())) {
             throw new ShortIntervalException("Short interval exception");
         }
 
         String code = RandomUtil.generateSmsCode();
         String message = String.format("bandla.uz \n code:%s", code);
 
-        SmsEntity sms = new SmsEntity();
-        sms.setPhoneNumber(phoneNumber);
-        sms.setMessage(message);
-        sms.setCode(code);
-        sms.setType(SmsType.VERIFICATION);
+        SmsEntity sms = new SmsEntity(phoneNumber, message, code, SmsType.VERIFICATION);
 
-        System.out.println(sms.getCode());
         smsService.sendSms(sms);
     }
 
     @Override
     public void checkConfirmationCode(CheckConfirmationCodeDTO dto) {
-        Optional<SmsEntity> optional = smsService.getLastSmsVerification(dto.getPhoneNumber());
-        if (optional.isEmpty()) {
+        Optional<SmsEntity> optional = getLastSmsVerification(dto.getPhoneNumber());
+        if (optional.isEmpty() ||
+                !VerificationUtil.isValid(optional.get(), dto.getCode())) {
             throw new VerificationCodeNotValidException();
         }
 
         SmsEntity sms = optional.get();
-
-        if (!sms.getCode().equals(dto.getCode()) ||
-                !VerificationUtil.isAfter2Minutes(sms.getCreatedDate()) ||
-                sms.isUsed()) {
-            throw new VerificationCodeNotValidException();
-        }
-
         sms.setUsed(true);
-        smsService.save(sms);
+        smsFavor.save(sms);
+    }
+
+    private Optional<SmsEntity> getLastSmsVerification(String phoneNumber) {
+        return smsFavor.getLastSms(phoneNumber, SmsType.VERIFICATION);
     }
 }
