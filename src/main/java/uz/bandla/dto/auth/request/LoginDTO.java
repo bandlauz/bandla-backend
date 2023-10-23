@@ -12,6 +12,6 @@ public class LoginDTO {
     @PhoneNumber
     private String phoneNumber;
 
-    @NotBlank
+    @NotBlank(message = "Password must not be blank")
     private String password;
 }
