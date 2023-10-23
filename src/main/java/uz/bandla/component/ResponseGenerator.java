@@ -16,6 +16,11 @@ public class ResponseGenerator {
         return generate(status, response);
     }
 
+    public ResponseEntity<Response<?>> generateOk(String message) {
+        Response<String> body = new Response<>(message);
+        return generate(HttpStatus.OK, body);
+    }
+
     public ResponseEntity<Response<?>> generateOk(String key, Object message) {
         return generate(HttpStatus.OK, key, message);
     }

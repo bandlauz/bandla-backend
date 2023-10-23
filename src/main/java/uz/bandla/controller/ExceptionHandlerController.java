@@ -54,7 +54,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ConstraintViolationException.class})
     private ResponseEntity<Response<?>> handle(ConstraintViolationException e) {
-        return responseGenerator.generateError(HttpStatus.BAD_REQUEST, 100, e.getMessage());
+        String message = e.getMessage();
+        int index = message.indexOf(": ");
+        message = message.substring(index + 1);
+        return responseGenerator.generateError(HttpStatus.BAD_REQUEST, 100, message);
     }
 
 

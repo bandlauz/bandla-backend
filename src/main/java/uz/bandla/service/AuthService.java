@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
-    ResponseEntity<Response<?>> prepareLogin(String phoneNumber);
+    ResponseEntity<Response<?>> isVerified(String phoneNumber);
+
+    ResponseEntity<Response<?>> sendConfirmationCode(String phoneNumber);
 
     ResponseEntity<Response<?>> checkConfirmationCode(CheckConfirmationCodeDTO dto);
 

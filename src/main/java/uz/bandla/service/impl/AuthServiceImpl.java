@@ -46,22 +46,29 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public ResponseEntity<Response<?>> prepareLogin(String phoneNumber) {
+    public ResponseEntity<Response<?>> isVerified(String phoneNumber) {
         Optional<ProfileEntity> optional = profileFavor.findByPhoneNumber(phoneNumber);
 
-        if (optional.isPresent() &&
-                !optional.get().getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
-            return responseGenerator.generateOk("isNotVerified", false);
-        }
-
-        if (optional.isEmpty()) {
+        if (optional.isPresent()) {
+            ProfileEntity profile = optional.get();
+            if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
+                return responseGenerator.generateOk("isNotVerified", false);
+            }
+        } else {
             ProfileEntity profile = new ProfileEntity();
             profile.setPhoneNumber(phoneNumber);
             profileFavor.save(profile);
         }
 
-        verificationService.sendConfirmationCode(phoneNumber);
         return responseGenerator.generateOk("isNotVerified", true);
+    }
+
+    @Override
+    public ResponseEntity<Response<?>> sendConfirmationCode(String phoneNumber) {
+        profileFavor.findByPhoneNumberOrElseThrow(phoneNumber);
+
+        verificationService.sendConfirmationCode(phoneNumber);
+        return responseGenerator.generateOk("SMS confirmation code sent");
     }
 
     @Override

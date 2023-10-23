@@ -27,10 +27,16 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController {
     public final AuthService service;
 
-    @Operation(summary = "Method for prepare login", description = "This method uses to check phoneNumber status in system")
-    @PostMapping("/prepare/{phoneNumber}")
-    public ResponseEntity<Response<?>> prepareLogin(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
-        return service.prepareLogin(phoneNumber);
+    @Operation(summary = "Method for checking", description = "This method uses to check phoneNumber status in system")
+    @PostMapping("/is-verified/{phoneNumber}")
+    public ResponseEntity<Response<?>> isVerified(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
+        return service.isVerified(phoneNumber);
+    }
+
+    @Operation(summary = "Method for send code", description = "This method uses to send sms verification code")
+    @PostMapping("/verification/send-confirmation-code/{phoneNumber}")
+    public ResponseEntity<Response<?>> sendConfirmationCode(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
+        return service.sendConfirmationCode(phoneNumber);
     }
 
     @Operation(summary = "Method for verify", description = "This method uses to verification")
