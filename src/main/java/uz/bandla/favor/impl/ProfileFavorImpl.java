@@ -1,19 +1,20 @@
-package uz.bandla.service.impl;
+package uz.bandla.favor.impl;
 
-import uz.bandla.exp.auth.ProfileNotFoundException;
-import uz.bandla.repository.ProfileRepository;
+import uz.bandla.annotations.Favor;
 import uz.bandla.entity.ProfileEntity;
-import uz.bandla.service.ProfileService;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import uz.bandla.exp.auth.ProfileNotFoundException;
+import uz.bandla.favor.ProfileFavor;
+import uz.bandla.repository.ProfileRepository;
 
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-public class ProfileServiceImpl implements ProfileService {
+@Favor
+public class ProfileFavorImpl implements ProfileFavor {
     private final ProfileRepository repository;
+
+    public ProfileFavorImpl(ProfileRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public void save(ProfileEntity profile) {

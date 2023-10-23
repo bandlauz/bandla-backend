@@ -1,5 +1,6 @@
 package uz.bandla.entity;
 
+import lombok.NoArgsConstructor;
 import uz.bandla.enums.SmsType;
 
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "sms")
 @Getter
 @Setter
+@NoArgsConstructor
 public class SmsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +41,11 @@ public class SmsEntity {
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
+
+    public SmsEntity(String phoneNumber, String message, String code, SmsType type) {
+        this.phoneNumber = phoneNumber;
+        this.message = message;
+        this.code = code;
+        this.type = type;
+    }
 }
