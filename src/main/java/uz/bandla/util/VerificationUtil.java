@@ -10,9 +10,9 @@ public class VerificationUtil {
     }
 
     public static boolean isValid(SmsEntity sms, String code) {
-        return !sms.getCode().equals(code) ||
-                !VerificationUtil.isAfter2Minutes(sms.getCreatedDate()) ||
-                sms.isUsed();
+        return sms.getCode().equals(code) &&
+                VerificationUtil.isShortInterval(sms.getCreatedDate()) &&
+                !sms.isUsed();
     }
 
     public static boolean isShortInterval(LocalDateTime createdDate) {

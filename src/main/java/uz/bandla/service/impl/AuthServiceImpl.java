@@ -1,9 +1,13 @@
 package uz.bandla.service.impl;
 
 import uz.bandla.dto.Response;
+import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.dto.auth.request.CompleteVerificationDTO;
 import uz.bandla.dto.auth.request.LoginDTO;
+import uz.bandla.dto.auth.response.CheckCodeResponseDTO;
+import uz.bandla.dto.auth.response.RefreshTokenResponseDTO;
+import uz.bandla.dto.auth.response.VerifiedResponseDTO;
 import uz.bandla.exp.auth.PasswordAlreadySavedException;
 import uz.bandla.exp.auth.ProfileLockedException;
 import uz.bandla.exp.auth.ProfileStatusIncorrectException;
@@ -13,7 +17,6 @@ import uz.bandla.security.jwt.JwtService;
 import uz.bandla.security.profile.ProfileDetails;
 import uz.bandla.security.profile.ProfileDetailsService;
 import uz.bandla.util.MD5;
-import uz.bandla.component.ResponseGenerator;
 import uz.bandla.dto.auth.response.LoginResponseDTO;
 import uz.bandla.entity.ProfileEntity;
 import uz.bandla.enums.ProfileStatus;
@@ -41,18 +44,17 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final VerificationService verificationService;
     private final ProfileFavor profileFavor;
-    private final ResponseGenerator responseGenerator;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public ResponseEntity<Response<?>> isVerified(String phoneNumber) {
+    public ResponseEntity<Response<VerifiedResponseDTO>> isNotVerified(String phoneNumber) {
         Optional<ProfileEntity> optional = profileFavor.findByPhoneNumber(phoneNumber);
 
         if (optional.isPresent()) {
             ProfileEntity profile = optional.get();
             if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
-                return responseGenerator.generateOk("isNotVerified", false);
+                return GoodResponse.ok(new VerifiedResponseDTO(false));
             }
         } else {
             ProfileEntity profile = new ProfileEntity();
@@ -60,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
             profileFavor.save(profile);
         }
 
-        return responseGenerator.generateOk("isNotVerified", true);
+        return GoodResponse.ok(new VerifiedResponseDTO(true));
     }
 
     @Override
@@ -68,23 +70,24 @@ public class AuthServiceImpl implements AuthService {
         profileFavor.findByPhoneNumberOrElseThrow(phoneNumber);
 
         verificationService.sendConfirmationCode(phoneNumber);
-        return responseGenerator.generateOk("SMS confirmation code sent");
+        return GoodResponse.ok("SUCCESS");
     }
 
     @Override
-    public ResponseEntity<Response<?>> checkConfirmationCode(CheckConfirmationCodeDTO dto) {
+    public ResponseEntity<Response<CheckCodeResponseDTO>> checkConfirmationCode(CheckConfirmationCodeDTO dto) {
         ProfileEntity profile = profileFavor.findByPhoneNumberOrElseThrow(dto.getPhoneNumber());
         if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
             throw new ProfileStatusIncorrectException();
         }
-        verificationService.checkConfirmationCode(dto);
 
-        return responseGenerator.generateOk("temporaryToken",
-                jwtService.generateTemporaryToken(profile.getPhoneNumber()));
+        verificationService.checkConfirmationCode(dto);
+        String temporaryToken = jwtService.generateTemporaryToken(profile.getPhoneNumber());
+
+        return GoodResponse.ok(new CheckCodeResponseDTO(temporaryToken));
     }
 
     @Override
-    public ResponseEntity<Response<String>> completeVerification(CompleteVerificationDTO dto) {
+    public ResponseEntity<Response<?>> completeVerification(CompleteVerificationDTO dto) {
         String temporaryToken = dto.getTemporaryToken();
         if (jwtService.isTokenExpired(temporaryToken)) {
             throw new TokenExpiredException(jwtService.getTokenExpiredMessage(temporaryToken));
@@ -102,7 +105,8 @@ public class AuthServiceImpl implements AuthService {
 
         String password = passwordEncoder.encode(MD5.encode(dto.getPassword()));
         profileFavor.savePassword(profile.getId(), password);
-        return responseGenerator.generateSuccess();
+
+        return GoodResponse.ok("SUCCESS");
     }
 
     @Override
@@ -125,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<Response<?>> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<Response<RefreshTokenResponseDTO>> refreshToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             return ResponseEntity.badRequest().build();
@@ -144,6 +148,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String accessToken = jwtService.generateAccessToken(userDetails.getUsername());
-        return responseGenerator.generateOk("accessToken", accessToken);
+
+        return GoodResponse.ok(new RefreshTokenResponseDTO(accessToken));
     }
 }
