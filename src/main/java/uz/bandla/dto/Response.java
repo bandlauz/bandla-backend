@@ -17,12 +17,15 @@ public class Response<T> {
         this.data = data;
     }
 
-    public Response(String message) {
-        this.message = message;
-    }
-
     public Response(int code, String error) {
         this.code = code;
         this.error = error;
+    }
+
+    public Response() {
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
