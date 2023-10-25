@@ -34,7 +34,7 @@ public class VerificationServiceImpl implements VerificationService {
         String message = String.format("bandla.uz \n code:%s", code);
 
         SmsEntity sms = new SmsEntity(phoneNumber, message, code, SmsType.VERIFICATION);
-
+        System.out.println(code);
         smsService.sendSms(sms);
     }
 

@@ -5,6 +5,9 @@ import uz.bandla.dto.Response;
 import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.dto.auth.request.CompleteVerificationDTO;
 import uz.bandla.dto.auth.request.LoginDTO;
+import uz.bandla.dto.auth.response.CheckCodeResponseDTO;
+import uz.bandla.dto.auth.response.RefreshTokenResponseDTO;
+import uz.bandla.dto.auth.response.VerifiedResponseDTO;
 import uz.bandla.service.AuthService;
 import uz.bandla.dto.auth.response.LoginResponseDTO;
 
@@ -29,7 +32,7 @@ public class AuthController {
 
     @Operation(summary = "Method for checking", description = "This method uses to check phoneNumber status in system")
     @PostMapping("/is-verified/{phoneNumber}")
-    public ResponseEntity<Response<?>> isVerified(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
+    public ResponseEntity<Response<VerifiedResponseDTO>> isVerified(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
         return service.isVerified(phoneNumber);
     }
 
@@ -41,13 +44,13 @@ public class AuthController {
 
     @Operation(summary = "Method for verify", description = "This method uses to verification")
     @PutMapping("/verification/check-confirmation-code")
-    public ResponseEntity<Response<?>> checkConfirmationCode(@RequestBody @Valid CheckConfirmationCodeDTO dto) {
+    public ResponseEntity<Response<CheckCodeResponseDTO>> checkConfirmationCode(@RequestBody @Valid CheckConfirmationCodeDTO dto) {
         return service.checkConfirmationCode(dto);
     }
 
     @Operation(summary = "Method for set password", description = "This method uses to set password")
     @PutMapping("/verification/complete")
-    public ResponseEntity<Response<String>> completeVerification(@RequestBody @Valid CompleteVerificationDTO dto) {
+    public ResponseEntity<Response<?>> completeVerification(@RequestBody @Valid CompleteVerificationDTO dto) {
         return service.completeVerification(dto);
     }
 
@@ -59,7 +62,7 @@ public class AuthController {
 
     @Operation(summary = "Method for refresh token", description = "This method used for refresh token")
     @GetMapping("/token/refresh")
-    public ResponseEntity<Response<?>> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<Response<RefreshTokenResponseDTO>> refreshToken(HttpServletRequest request) {
         return service.refreshToken(request);
     }
 }

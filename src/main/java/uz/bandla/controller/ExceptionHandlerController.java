@@ -1,6 +1,6 @@
 package uz.bandla.controller;
 
-import uz.bandla.component.ResponseGenerator;
+import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.Response;
 import uz.bandla.exp.ResponseException;
 import uz.bandla.exp.auth.*;
@@ -26,8 +26,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
-    private final ResponseGenerator responseGenerator;
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
@@ -49,7 +47,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
             TokenExpiredException.class, ShortIntervalException.class, PasswordAlreadySavedException.class,
             ProfileLockedException.class, ProfileStatusIncorrectException.class})
     private ResponseEntity<Response<?>> handle(ResponseException e) {
-        return responseGenerator.generateError(e.getStatus(), e.getCode(), e.getMessage());
+        return GoodResponse.error(e.getStatus(), e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
@@ -57,12 +55,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         String message = e.getMessage();
         int index = message.indexOf(": ");
         message = message.substring(index + 1);
-        return responseGenerator.generateError(HttpStatus.BAD_REQUEST, 100, message);
+        return GoodResponse.error(HttpStatus.BAD_REQUEST, 100, message);
     }
 
 
     @ExceptionHandler({JWTDecodeException.class, SignatureException.class})
     private ResponseEntity<Response<?>> forbiddenHandler(RuntimeException e) {
-        return responseGenerator.generateError(HttpStatus.FORBIDDEN, 0, e.getMessage());
+        return GoodResponse.error(HttpStatus.FORBIDDEN, 0, e.getMessage());
     }
 }
