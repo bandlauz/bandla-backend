@@ -47,7 +47,7 @@ public class AuthController {
 
     @Operation(summary = "Method for set password", description = "This method uses to set password")
     @PutMapping("/verification/complete")
-    public ResponseEntity<Response> completeVerification(@RequestBody @Valid CompleteVerificationDTO dto) {
+    public ResponseEntity<Response<String>> completeVerification(@RequestBody @Valid CompleteVerificationDTO dto) {
         return service.completeVerification(dto);
     }
 
