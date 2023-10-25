@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
-    ResponseEntity<Response<VerifiedResponseDTO>> isVerified(String phoneNumber);
+    ResponseEntity<Response<VerifiedResponseDTO>> isNotVerified(String phoneNumber);
 
     ResponseEntity<Response<?>> sendConfirmationCode(String phoneNumber);
 

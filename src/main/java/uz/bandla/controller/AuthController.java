@@ -31,9 +31,9 @@ public class AuthController {
     public final AuthService service;
 
     @Operation(summary = "Method for checking", description = "This method uses to check phoneNumber status in system")
-    @PostMapping("/is-verified/{phoneNumber}")
-    public ResponseEntity<Response<VerifiedResponseDTO>> isVerified(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
-        return service.isVerified(phoneNumber);
+    @PostMapping("/is-not-verified/{phoneNumber}")
+    public ResponseEntity<Response<VerifiedResponseDTO>> isNotVerified(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
+        return service.isNotVerified(phoneNumber);
     }
 
     @Operation(summary = "Method for send code", description = "This method uses to send sms verification code")

@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public ResponseEntity<Response<VerifiedResponseDTO>> isVerified(String phoneNumber) {
+    public ResponseEntity<Response<VerifiedResponseDTO>> isNotVerified(String phoneNumber) {
         Optional<ProfileEntity> optional = profileFavor.findByPhoneNumber(phoneNumber);
 
         if (optional.isPresent()) {
