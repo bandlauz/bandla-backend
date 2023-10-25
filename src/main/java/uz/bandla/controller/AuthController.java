@@ -40,14 +40,14 @@ public class AuthController {
     }
 
     @Operation(summary = "Method for verify", description = "This method uses to verification")
-    @PostMapping("/verification/check-confirmation-code")
+    @PutMapping("/verification/check-confirmation-code")
     public ResponseEntity<Response<?>> checkConfirmationCode(@RequestBody @Valid CheckConfirmationCodeDTO dto) {
         return service.checkConfirmationCode(dto);
     }
 
     @Operation(summary = "Method for set password", description = "This method uses to set password")
-    @PostMapping("/verification/complete")
-    public ResponseEntity<Response<String>> completeVerification(@RequestBody @Valid CompleteVerificationDTO dto) {
+    @PutMapping("/verification/complete")
+    public ResponseEntity<Response> completeVerification(@RequestBody @Valid CompleteVerificationDTO dto) {
         return service.completeVerification(dto);
     }
 
