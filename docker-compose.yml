@@ -24,6 +24,8 @@ services:
       - BUCKET4J_0_CAPACITY=${BUCKET4J_0_CAPACITY}
       - BUCKET4J_0_TIME=${BUCKET4J_0_TIME}
       - BUCKET4J_0_UNIT=${BUCKET4J_0_UNIT}
+      - BOT_NAME=${BOT_NAME}
+      - BOT_TOKEN=${BOT_TOKEN}
     networks:
       - net
 networks:

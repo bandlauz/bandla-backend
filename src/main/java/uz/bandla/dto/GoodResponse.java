@@ -5,14 +5,16 @@ import org.springframework.http.ResponseEntity;
 
 public class GoodResponse {
 
-    public static ResponseEntity<Response<?>> ok(String message) {
+    public static ResponseEntity<Response<?>> okMessage(String message) {
         Response<?> response = new Response<>();
         response.setMessage(message);
         return ResponseEntity.ok(response);
     }
 
     public static <T> ResponseEntity<Response<T>> ok(T data) {
-        return ResponseEntity.ok(new Response<>(data));
+        Response<T> response = new Response<>();
+        response.setData(data);
+        return ResponseEntity.ok(response);
     }
 
     public static ResponseEntity<Response<?>> error(HttpStatus status, int code, String error) {

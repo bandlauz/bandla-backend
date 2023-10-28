@@ -1,21 +1,24 @@
 package uz.bandla.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import uz.bandla.dto.Response;
 import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.dto.auth.request.CompleteVerificationDTO;
 import uz.bandla.dto.auth.request.LoginDTO;
-import uz.bandla.dto.auth.response.CheckCodeResponseDTO;
-import uz.bandla.dto.auth.response.RefreshTokenResponseDTO;
-import uz.bandla.dto.auth.response.VerifiedResponseDTO;
-import uz.bandla.exp.auth.PasswordAlreadySavedException;
-import uz.bandla.exp.auth.ProfileLockedException;
-import uz.bandla.exp.auth.ProfileStatusIncorrectException;
-import uz.bandla.exp.auth.TokenExpiredException;
+import uz.bandla.dto.auth.request.TelegramLoginDTO;
+import uz.bandla.entity.TelegramUserEntity;
+import uz.bandla.enums.ProfileRole;
+import uz.bandla.exp.auth.*;
 import uz.bandla.favor.ProfileFavor;
+import uz.bandla.favor.TelegramUserFavor;
 import uz.bandla.security.jwt.JwtService;
 import uz.bandla.security.profile.ProfileDetails;
 import uz.bandla.security.profile.ProfileDetailsService;
+import uz.bandla.telegrambot.service.MessageSenderService;
+import uz.bandla.telegrambot.util.ButtonUtil;
+import uz.bandla.util.AuthUtil;
 import uz.bandla.util.MD5;
 import uz.bandla.dto.auth.response.LoginResponseDTO;
 import uz.bandla.entity.ProfileEntity;
@@ -44,17 +47,22 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final VerificationService verificationService;
     private final ProfileFavor profileFavor;
+    private final TelegramUserFavor telegramUserFavor;
+    private final MessageSenderService messageSenderService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    @Value("${bot.token}")
+    private String botToken;
+
     @Override
-    public ResponseEntity<Response<VerifiedResponseDTO>> isNotVerified(String phoneNumber) {
+    public ResponseEntity<Response<Boolean>> isNotVerified(String phoneNumber) {
         Optional<ProfileEntity> optional = profileFavor.findByPhoneNumber(phoneNumber);
 
         if (optional.isPresent()) {
             ProfileEntity profile = optional.get();
             if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
-                return GoodResponse.ok(new VerifiedResponseDTO(false));
+                return GoodResponse.ok(Boolean.FALSE);
             }
         } else {
             ProfileEntity profile = new ProfileEntity();
@@ -62,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
             profileFavor.save(profile);
         }
 
-        return GoodResponse.ok(new VerifiedResponseDTO(true));
+        return GoodResponse.ok(Boolean.TRUE);
     }
 
     @Override
@@ -70,11 +78,11 @@ public class AuthServiceImpl implements AuthService {
         profileFavor.findByPhoneNumberOrElseThrow(phoneNumber);
 
         verificationService.sendConfirmationCode(phoneNumber);
-        return GoodResponse.ok("SUCCESS");
+        return GoodResponse.okMessage("SUCCESS");
     }
 
     @Override
-    public ResponseEntity<Response<CheckCodeResponseDTO>> checkConfirmationCode(CheckConfirmationCodeDTO dto) {
+    public ResponseEntity<Response<String>> checkConfirmationCode(CheckConfirmationCodeDTO dto) {
         ProfileEntity profile = profileFavor.findByPhoneNumberOrElseThrow(dto.getPhoneNumber());
         if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
             throw new ProfileStatusIncorrectException();
@@ -82,8 +90,7 @@ public class AuthServiceImpl implements AuthService {
 
         verificationService.checkConfirmationCode(dto);
         String temporaryToken = jwtService.generateTemporaryToken(profile.getPhoneNumber());
-
-        return GoodResponse.ok(new CheckCodeResponseDTO(temporaryToken));
+        return GoodResponse.ok(temporaryToken);
     }
 
     @Override
@@ -106,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
         String password = passwordEncoder.encode(MD5.encode(dto.getPassword()));
         profileFavor.savePassword(profile.getId(), password);
 
-        return GoodResponse.ok("SUCCESS");
+        return GoodResponse.okMessage("SUCCESS");
     }
 
     @Override
@@ -117,19 +124,12 @@ public class AuthServiceImpl implements AuthService {
                         MD5.encode(dto.getPassword())));
         ProfileDetails profile = (ProfileDetails) authenticate.getPrincipal();
 
-        String accessToken = jwtService.generateAccessToken(profile.getUsername());
-        String refreshToken = jwtService.generateRefreshToken(profile.getUsername());
-
-        Response<LoginResponseDTO> response = new Response<>(LoginResponseDTO.builder()
-                .authorities(profile.getAuthorities())
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build());
-        return ResponseEntity.ok(response);
+        LoginResponseDTO responseDTO = generateLoginResponse(profile.getUsername(), profile.getRole());
+        return GoodResponse.ok(responseDTO);
     }
 
     @Override
-    public ResponseEntity<Response<RefreshTokenResponseDTO>> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<Response<String>> refreshToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             return ResponseEntity.badRequest().build();
@@ -148,7 +148,73 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String accessToken = jwtService.generateAccessToken(userDetails.getUsername());
+        return GoodResponse.ok(accessToken);
+    }
 
-        return GoodResponse.ok(new RefreshTokenResponseDTO(accessToken));
+    @Override
+    public ResponseEntity<Response<Boolean>> checkTelegramAccount(TelegramLoginDTO dto) {
+        checkTelegramLoginData(dto);
+
+        Optional<TelegramUserEntity> optional = telegramUserFavor.findById(dto.getId());
+        if (optional.isPresent()) {
+
+            TelegramUserEntity telegramUser = optional.get();
+            telegramUser.setFirstName(dto.getFirst_name());
+            telegramUser.setLastName(dto.getLast_name());
+            telegramUser.setUsername(dto.getUsername());
+            telegramUser.setPhotoUrl(dto.getPhoto_url());
+            telegramUserFavor.save(telegramUser);
+
+            if (telegramUser.getProfile() != null) {
+                ProfileEntity profile = telegramUser.getProfile();
+                profile.setStatus(ProfileStatus.ACTIVE);
+                profileFavor.save(profile);
+                return GoodResponse.ok(Boolean.TRUE);
+            }
+        }
+
+        TelegramUserEntity telegramUser = new TelegramUserEntity(dto.getId(), dto.getFirst_name(), dto.getLast_name(), dto.getUsername(), dto.getPhoto_url());
+        telegramUserFavor.save(telegramUser);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText("bandla.uz sahifasiga kirish uchun telefon raqamingizni yuboring");
+        sendMessage.setChatId(telegramUser.getId());
+        sendMessage.setReplyMarkup(ButtonUtil.getSendContactMarKup());
+
+        messageSenderService.send(sendMessage);
+
+        return GoodResponse.ok(Boolean.FALSE);
+    }
+
+    @Override
+    public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(TelegramLoginDTO dto) {
+        checkTelegramLoginData(dto);
+
+        TelegramUserEntity telegramUser = telegramUserFavor.findByIdOrElseTrow(dto.getId());
+        if (telegramUser.getProfile() == null) {
+            throw new TelegramLoginException();
+        }
+
+        ProfileEntity profile = telegramUser.getProfile();
+
+        LoginResponseDTO responseDTO = generateLoginResponse(profile.getPhoneNumber(), profile.getRole());
+        return GoodResponse.ok(responseDTO);
+    }
+
+    private LoginResponseDTO generateLoginResponse(String phoneNumber, ProfileRole role) {
+        String accessToken = jwtService.generateAccessToken(phoneNumber);
+        String refreshToken = jwtService.generateRefreshToken(phoneNumber);
+
+        return LoginResponseDTO.builder()
+                .role(role)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    private void checkTelegramLoginData(TelegramLoginDTO dto) {
+        if (!AuthUtil.checkTelegramAuthorization(dto, botToken)) {
+            throw new TelegramLoginException("Telegram login exception");
+        }
     }
 }
