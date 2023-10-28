@@ -1,6 +1,7 @@
 package uz.bandla.security.profile;
 
 import uz.bandla.entity.ProfileEntity;
+import uz.bandla.enums.ProfileRole;
 import uz.bandla.enums.ProfileStatus;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,5 +50,9 @@ public class ProfileDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return profile.getIsVisible();
+    }
+
+    public ProfileRole getRole() {
+        return profile.getRole();
     }
 }

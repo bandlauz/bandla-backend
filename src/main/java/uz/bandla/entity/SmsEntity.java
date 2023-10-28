@@ -3,7 +3,6 @@ package uz.bandla.entity;
 import lombok.NoArgsConstructor;
 import uz.bandla.enums.SmsType;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,21 +20,20 @@ public class SmsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
+    @Column(name = "phone_number", nullable = false, updatable = false)
     private String phoneNumber;
 
-    @NotNull
-    @Column(length = 4)
+    @Column(length = 4, nullable = false, updatable = false)
     private String code;
 
-    @NotNull
+    @Column(name = "message", nullable = false, updatable = false)
     private String message;
 
-    @NotNull
+    @Column(name = "type", nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     private SmsType type;
 
-    @NotNull
+    @Column(name = "is_used", nullable = false)
     private boolean isUsed = false;
 
     @Column(nullable = false, updatable = false)

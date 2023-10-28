@@ -5,9 +5,7 @@ import uz.bandla.dto.Response;
 import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.dto.auth.request.CompleteVerificationDTO;
 import uz.bandla.dto.auth.request.LoginDTO;
-import uz.bandla.dto.auth.response.CheckCodeResponseDTO;
-import uz.bandla.dto.auth.response.RefreshTokenResponseDTO;
-import uz.bandla.dto.auth.response.VerifiedResponseDTO;
+import uz.bandla.dto.auth.request.TelegramLoginDTO;
 import uz.bandla.service.AuthService;
 import uz.bandla.dto.auth.response.LoginResponseDTO;
 
@@ -32,7 +30,7 @@ public class AuthController {
 
     @Operation(summary = "Method for checking", description = "This method uses to check phoneNumber status in system")
     @PostMapping("/is-not-verified/{phoneNumber}")
-    public ResponseEntity<Response<VerifiedResponseDTO>> isNotVerified(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
+    public ResponseEntity<Response<Boolean>> isNotVerified(@PathVariable("phoneNumber") @PhoneNumber String phoneNumber) {
         return service.isNotVerified(phoneNumber);
     }
 
@@ -44,7 +42,7 @@ public class AuthController {
 
     @Operation(summary = "Method for verify", description = "This method uses to verification")
     @PutMapping("/verification/check-confirmation-code")
-    public ResponseEntity<Response<CheckCodeResponseDTO>> checkConfirmationCode(@RequestBody @Valid CheckConfirmationCodeDTO dto) {
+    public ResponseEntity<Response<String>> checkConfirmationCode(@RequestBody @Valid CheckConfirmationCodeDTO dto) {
         return service.checkConfirmationCode(dto);
     }
 
@@ -60,9 +58,19 @@ public class AuthController {
         return service.login(dto);
     }
 
+    @PostMapping("/check-telegram-account")
+    public ResponseEntity<Response<Boolean>> checkTelegramAccount(@RequestBody @Valid TelegramLoginDTO dto) {
+        return service.checkTelegramAccount(dto);
+    }
+
+    @PostMapping("/login-with-telegram")
+    public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(@RequestBody @Valid TelegramLoginDTO dto) {
+        return service.loginWithTelegram(dto);
+    }
+
     @Operation(summary = "Method for refresh token", description = "This method used for refresh token")
     @GetMapping("/token/refresh")
-    public ResponseEntity<Response<RefreshTokenResponseDTO>> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<Response<String>> refreshToken(HttpServletRequest request) {
         return service.refreshToken(request);
     }
 }

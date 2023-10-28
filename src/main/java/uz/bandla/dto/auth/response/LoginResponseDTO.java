@@ -1,16 +1,15 @@
 package uz.bandla.dto.auth.response;
 
 import lombok.*;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import uz.bandla.enums.ProfileRole;
 
-import java.util.Collection;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponseDTO {
-    private Collection<SimpleGrantedAuthority> authorities;
+    private ProfileRole role;
     private String accessToken;
     private String refreshToken;
 }
