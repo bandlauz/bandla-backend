@@ -24,8 +24,4 @@ public class Response<T> {
 
     public Response() {
     }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

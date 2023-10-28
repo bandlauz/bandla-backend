@@ -16,7 +16,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   datasource:
     url: jdbc:postgresql://ep-withered-violet-751927.ap-southeast-1.aws.neon.tech/CompilerBot?user=nazarovv2&password=oHBE4jGNlW7K
     password: oHBE4jGNlW7K
@@ -37,3 +37,7 @@ bucket4j:
     url: .*
     cache-name: buckets
   enabled: 'true'
+
+bot:
+  name: bandla_devbot
+  token: 6987321982:AAEvLJJrQeOaXFoyZ4D5WzvAafSR1i_qNzI
