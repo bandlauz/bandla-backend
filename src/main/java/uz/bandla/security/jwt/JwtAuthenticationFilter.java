@@ -74,7 +74,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/auth/token/refresh");
+        return request.getServletPath().equals("/auth/refresh-token");
     }
 
     private void writeError(HttpServletResponse response, String message) {
