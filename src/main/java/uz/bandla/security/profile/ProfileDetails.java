@@ -55,4 +55,8 @@ public class ProfileDetails implements UserDetails {
     public ProfileRole getRole() {
         return profile.getRole();
     }
+
+    public ProfileEntity getProfile() {
+        return profile;
+    }
 }
