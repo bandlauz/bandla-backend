@@ -56,7 +56,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/", "/main").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/**").hasRole(ProfileRole.USER.name())
+                        .requestMatchers("/api/profile/my/**").hasAnyAuthority(ProfileRole.USER.name(), ProfileRole.ADMIN.name())
+                        .requestMatchers("/api/**").hasAuthority(ProfileRole.USER.name())
                         .anyRequest().authenticated());
 
         return http.build();
