@@ -20,4 +20,8 @@ public class GoodResponse {
     public static ResponseEntity<Response<?>> error(HttpStatus status, int code, String error) {
         return ResponseEntity.status(status).body(new Response<>(code, error));
     }
+
+    public static ResponseEntity<Response<String>> badRequest(String message) {
+        return ResponseEntity.badRequest().body(new Response<>(101, message));
+    }
 }

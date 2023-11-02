@@ -69,7 +69,7 @@ public class AuthController {
     }
 
     @Operation(summary = "Method for refresh token", description = "This method used for refresh token")
-    @GetMapping("/token/refresh")
+    @GetMapping("/refresh-token")
     public ResponseEntity<Response<String>> refreshToken(HttpServletRequest request) {
         return service.refreshToken(request);
     }
