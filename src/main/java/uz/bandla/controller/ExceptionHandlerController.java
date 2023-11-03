@@ -13,14 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.*;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -30,22 +28,17 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status, WebRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", status.value());
+        Response<?> r = new Response<>();
+        ex.getBindingResult().getFieldErrors()
+                .forEach(fieldError -> r.addError(fieldError.getDefaultMessage()));
 
-        List<String> errors = new LinkedList<>();
-        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            errors.add(fieldError.getDefaultMessage());
-        }
-        body.put("errors", errors);
-        return new ResponseEntity<>(body, headers, status);
+        return ResponseEntity.badRequest().body(r);
     }
 
     @ExceptionHandler({ProfileNotFoundException.class, VerificationCodeNotValidException.class,
             PhoneNumberNotFoundException.class, PhoneNumberAlreadyRegisteredException.class,
             TokenExpiredException.class, ShortIntervalException.class, PasswordAlreadySavedException.class,
-            ProfileLockedException.class, ProfileStatusIncorrectException.class})
+            ProfileLockedException.class, ProfileStatusIncorrectException.class, AuthHeaderNotFoundException.class})
     private ResponseEntity<Response<?>> handle(ResponseException e) {
         return GoodResponse.error(e.getStatus(), e.getCode(), e.getMessage());
     }
@@ -55,7 +48,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         String message = e.getMessage();
         int index = message.indexOf(": ");
         message = message.substring(index + 1);
-        return GoodResponse.error(HttpStatus.BAD_REQUEST, 100, message);
+        return GoodResponse.badRequest(message);
     }
 
 
