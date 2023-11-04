@@ -15,6 +15,6 @@ public class ProfileAuthenticationEntryPoint implements AuthenticationEntryPoint
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getOutputStream().println("{ \"error\": \"" + authException.getMessage() + "\" }");
+        response.getOutputStream().println("{ \"errors\": [\"" + authException.getMessage() + "\"] }");
     }
 }
