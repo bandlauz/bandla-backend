@@ -39,5 +39,17 @@ bucket4j:
   enabled: 'true'
 
 bot:
-  name: bandla_devbot
-  token: 6987321982:AAEvLJJrQeOaXFoyZ4D5WzvAafSR1i_qNzI
+  name: ${BOT_NAME}
+  token: ${BOT_TOKEN}
+
+aws:
+  credentials:
+    access-key: ${AWS_CREDENTIALS_ACCESS_KEY}
+    secret-key: ${AWS_CREDENTIALS_SECRET_KEY}
+  s3:
+    bucket:
+      region:
+        static: ${AWS_S3_BUCKET_REGION_STATIC}
+    stack:
+      auto: ${AWS_S3_BUCKET_STACK_AUTO}
+    name: ${AWS_S3_BUCKET_NAME}

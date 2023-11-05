@@ -113,6 +113,11 @@
             <artifactId>telegram-bot-spring</artifactId>
             <version>1.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.580</version>
+        </dependency>
     </dependencies>
 
     <build>
