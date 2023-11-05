@@ -21,7 +21,7 @@ public class GoodResponse {
         return ResponseEntity.status(status).body(new Response<>(code, error));
     }
 
-    public static ResponseEntity<Response<String>> badRequest(String message) {
+    public static ResponseEntity<Response<?>> badRequest(String message) {
         return ResponseEntity.badRequest().body(new Response<>(101, message));
     }
 }

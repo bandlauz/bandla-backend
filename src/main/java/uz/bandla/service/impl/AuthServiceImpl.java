@@ -132,7 +132,7 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<Response<String>> refreshToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return GoodResponse.badRequest("Authorization header not found");
+            throw new AuthHeaderNotFoundException();
         }
 
         String refreshToken = authorizationHeader.substring("Bearer ".length());
