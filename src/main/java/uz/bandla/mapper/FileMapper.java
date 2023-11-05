@@ -1,8 +1,9 @@
 package uz.bandla.mapper;
 
-import org.springframework.stereotype.Component;
 import uz.bandla.dto.file.FileDTO;
 import uz.bandla.entity.FileEntity;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class FileMapper {
