@@ -1,4 +1,6 @@
-package uz.bandla.telegrambot.handler;
+package uz.bandla.telegrambot.handler.impl;
+
+import uz.bandla.telegrambot.handler.Handler;
 
 import lombok.RequiredArgsConstructor;
 
