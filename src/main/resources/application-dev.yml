@@ -13,6 +13,10 @@ security:
     live: '60000'
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   jpa:
     show-sql: true
     hibernate:
@@ -48,8 +52,9 @@ aws:
     secret-key: ${AWS_CREDENTIALS_SECRET_KEY}
   s3:
     bucket:
+      name: ${AWS_S3_BUCKET_NAME}
       region:
         static: ${AWS_S3_BUCKET_REGION_STATIC}
     stack:
       auto: ${AWS_S3_BUCKET_STACK_AUTO}
-    name: ${AWS_S3_BUCKET_NAME}
+    url: https://${aws.s3.bucket.name}.s3.${aws.s3.bucket.region.static}.amazonaws.com/
