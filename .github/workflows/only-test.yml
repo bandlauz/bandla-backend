@@ -16,15 +16,7 @@ jobs:
 
       - name: 'Create env file'
         run: |
-          touch .env
-          echo BOT_NAME=${{ secrets.BOT_NAME}} >> .env
-          echo BOT_TOKEN=${{ secrets.BOT_TOKEN}} >> .env
-          echo AWS_CREDENTIALS_ACCESS_KEY=${secrets.AWS_CREDENTIALS_ACCESS_KEY} >> .env
-          echo AWS_CREDENTIALS_SECRET_KEY=${{ secrets.AWS_CREDENTIALS_SECRET_KEY}} >> .env
-          echo AWS_S3_BUCKET_REGION_STATIC=${{ secrets.AWS_S3_BUCKET_REGION_STATIC}} >> .env
-          echo AWS_S3_BUCKET_STACK_AUTO=${{ secrets.AWS_S3_BUCKET_STACK_AUTO}} >> .env
-          echo AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME}} >> .env
-          cat .env
+          echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Setup Java
         uses: actions/setup-java@v3
