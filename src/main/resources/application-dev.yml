@@ -45,6 +45,7 @@ bucket4j:
 bot:
   name: ${BOT_NAME}
   token: ${BOT_TOKEN}
+  commands: /start
 
 aws:
   credentials:
