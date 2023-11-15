@@ -28,7 +28,7 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtFilter;
     private final ProfileAuthenticationEntryPoint profileAuthenticationEntryPoint;
     private final ProfileDetailsService profileDetailsService;
-    private static final String[] AUTH_WHITELIST = {
+    private static final String[] SWAGGER_WHITELIST = {
             "/v2/api-docs",
             "/configuration/ui",
             "/configuration/security",
@@ -53,11 +53,13 @@ public class SecurityConfiguration {
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/main").permitAll()
-                        .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/profile/my/**").hasAnyAuthority(ProfileRole.USER.name(), ProfileRole.ADMIN.name())
+                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                        .requestMatchers("/", "/main", "/auth/**").permitAll()
+                        .requestMatchers("/api/profile/my/**").hasAnyAuthority(ProfileRole.USER.name(), ProfileRole.MANAGER.name(), ProfileRole.ADMIN.name(), ProfileRole.SUPER_ADMIN.name())
                         .requestMatchers("/api/**").hasAuthority(ProfileRole.USER.name())
+                        .requestMatchers("/manager-panel/**").hasAuthority(ProfileRole.MANAGER.name())
+                        .requestMatchers("/super-admin-panel/**").hasAuthority(ProfileRole.SUPER_ADMIN.name())
+                        .requestMatchers("/admin-panel/**").hasAuthority(ProfileRole.ADMIN.name())
                         .anyRequest().authenticated());
 
         return http.build();
