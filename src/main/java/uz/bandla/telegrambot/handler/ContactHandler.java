@@ -1,36 +1,29 @@
-package uz.bandla.telegrambot.handler.impl;
+package uz.bandla.telegrambot.handler;
 
-import lombok.RequiredArgsConstructor;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Contact;
-
-import org.telegram.telegrambots.meta.api.objects.Message;
 import uz.bandla.entity.ProfileEntity;
 import uz.bandla.entity.TelegramUserEntity;
 import uz.bandla.favor.ProfileFavor;
 import uz.bandla.favor.TelegramUserFavor;
-import uz.bandla.telegrambot.handler.Handler;
+import uz.bandla.telegrambot.handler.interfaces.Handler;
 import uz.bandla.telegrambot.service.MessageSenderService;
 import uz.bandla.telegrambot.util.ButtonUtil;
+
+import lombok.RequiredArgsConstructor;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Contact;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Optional;
 
 @uz.bandla.annotations.Handler
 @RequiredArgsConstructor
-public class MessageHandlerImpl implements Handler<Message> {
+public class ContactHandler implements Handler<Message> {
     private final ProfileFavor profileFavor;
     private final TelegramUserFavor telegramUserFavor;
-
     private final MessageSenderService messageSenderService;
 
     @Override
     public void handle(Message message) {
-        if (message.hasContact()) {
-            getPhoneNumber(message);
-        }
-    }
-
-    private void getPhoneNumber(Message message) {
         Contact contact = message.getContact();
 
         Optional<TelegramUserEntity> optional = telegramUserFavor.findById(message.getChatId());
@@ -48,10 +41,12 @@ public class MessageHandlerImpl implements Handler<Message> {
         telegramUserFavor.save(telegramUser);
 
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setText("Success");
-        sendMessage.setReplyMarkup(ButtonUtil.getKeyboardRemove());
         sendMessage.setChatId(message.getChatId());
-
+        sendMessage.setText("""
+                Muvaffaqiyatli ro‘yxatdan o‘tdingiz!
+                bandla.uz sahifasiga qaytib yana bir bor
+                telegram orqali kirishga bosing""");
+        sendMessage.setReplyMarkup(ButtonUtil.getKeyboardRemove());
         messageSenderService.send(sendMessage);
     }
 }

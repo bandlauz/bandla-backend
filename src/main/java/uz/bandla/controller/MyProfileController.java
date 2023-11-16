@@ -1,12 +1,12 @@
 package uz.bandla.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import uz.bandla.dto.Response;
 import uz.bandla.dto.profile.MyProfileDTO;
 import uz.bandla.dto.profile.MyProfileResponseDTO;
 import uz.bandla.service.MyProfileService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
