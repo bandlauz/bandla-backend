@@ -1,0 +1,19 @@
+package uz.bandla.exp;
+
+import org.springframework.http.HttpStatus;
+
+public class CompanyExistsException extends ResponseException {
+    public CompanyExistsException(String message) {
+        super(message);
+    }
+
+    @Override
+    public int getCode() {
+        return 100;
+    }
+
+    @Override
+    public HttpStatus getStatus() {
+        return HttpStatus.BAD_REQUEST;
+    }
+}
