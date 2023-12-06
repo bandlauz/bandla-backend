@@ -10,11 +10,17 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class MessageHandler implements Handler<Message> {
     private final TextHandler textHandler;
     private final ContactHandler contactHandler;
+    private final PassportDataHandler passportDataHandler;
 
     @Override
     public void handle(Message message) {
         if (message.hasText()) {
             textHandler.handle(message);
+            return;
+        }
+
+        if (message.hasPassportData()) {
+            passportDataHandler.handle(message);
             return;
         }
 
