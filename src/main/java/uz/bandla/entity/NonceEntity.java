@@ -17,16 +17,19 @@ import java.util.UUID;
 public class NonceEntity {
     @Id
     @Column(name = "id", nullable = false, updatable = false, unique = true)
-    private UUID id;
+    private String id;
 
     @Column(name = "is_used", nullable = false)
     private Boolean isUsed = false;
+
+    @ManyToOne
+    private ProfileEntity profile;
 
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 
-    public NonceEntity(UUID id) {
+    public NonceEntity(String id) {
         this.id = id;
     }
 }

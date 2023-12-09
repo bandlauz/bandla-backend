@@ -5,7 +5,6 @@ import uz.bandla.dto.Response;
 import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.dto.auth.request.CompleteVerificationDTO;
 import uz.bandla.dto.auth.request.LoginDTO;
-import uz.bandla.dto.auth.request.TelegramLoginDTO;
 import uz.bandla.service.AuthService;
 import uz.bandla.dto.auth.response.LoginResponseDTO;
 
@@ -62,17 +61,10 @@ public class AuthController {
         return service.getNonce();
     }
 
-    @Operation(summary = "Check telegram account in system")
-    @PostMapping("/check-telegram-account")
-    public ResponseEntity<Response<Boolean>> checkTelegramAccount(@RequestBody @Valid TelegramLoginDTO dto) {
-        return service.checkTelegramAccount(dto);
-    }
-
-
     @Operation(summary = "Login with telegram")
     @PostMapping("/login-with-telegram")
-    public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(@RequestBody @Valid TelegramLoginDTO dto) {
-        return service.loginWithTelegram(dto);
+    public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(@RequestBody @Valid String nonce) {
+        return service.loginWithTelegram(nonce);
     }
 
     @Operation(summary = "Get new access token")

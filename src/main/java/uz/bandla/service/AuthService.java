@@ -23,9 +23,7 @@ public interface AuthService {
 
     ResponseEntity<Response<String>> refreshToken(HttpServletRequest request);
 
-    ResponseEntity<Response<Boolean>> checkTelegramAccount(TelegramLoginDTO dto);
-
-    ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(TelegramLoginDTO dto);
+    ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(String nonce);
 
     ResponseEntity<Response<String>> getNonce();
 }
