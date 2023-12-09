@@ -59,4 +59,8 @@ public class ProfileEntity {
         this.phoneNumber = phoneNumber;
         this.photoUrl = photoUrl;
     }
+
+    public ProfileEntity(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
