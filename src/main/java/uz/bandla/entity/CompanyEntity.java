@@ -41,7 +41,7 @@ public class CompanyEntity {
     @Column(name = "status", nullable = false)
     private CompanyStatus status = CompanyStatus.CREATED;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 
