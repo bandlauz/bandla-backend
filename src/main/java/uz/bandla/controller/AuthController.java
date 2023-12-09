@@ -56,6 +56,11 @@ public class AuthController {
         return service.login(dto);
     }
 
+    @Operation(summary = "Get nonce")
+    @GetMapping("/nonce")
+    public ResponseEntity<Response<String>> getNonce() {
+        return service.getNonce();
+    }
 
     @Operation(summary = "Check telegram account in system")
     @PostMapping("/check-telegram-account")

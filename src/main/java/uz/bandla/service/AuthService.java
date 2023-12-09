@@ -26,4 +26,6 @@ public interface AuthService {
     ResponseEntity<Response<Boolean>> checkTelegramAccount(TelegramLoginDTO dto);
 
     ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(TelegramLoginDTO dto);
+
+    ResponseEntity<Response<String>> getNonce();
 }

@@ -11,6 +11,7 @@ import uz.bandla.dto.auth.request.TelegramLoginDTO;
 import uz.bandla.entity.TelegramUserEntity;
 import uz.bandla.enums.ProfileRole;
 import uz.bandla.exp.auth.*;
+import uz.bandla.favor.NonceFavor;
 import uz.bandla.favor.ProfileFavor;
 import uz.bandla.favor.TelegramUserFavor;
 import uz.bandla.security.jwt.JwtService;
@@ -47,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final VerificationService verificationService;
     private final ProfileFavor profileFavor;
+    private final NonceFavor nonceFavor;
     private final TelegramUserFavor telegramUserFavor;
     private final MessageSenderService messageSenderService;
     private final PasswordEncoder passwordEncoder;
@@ -199,6 +201,12 @@ public class AuthServiceImpl implements AuthService {
 
         LoginResponseDTO responseDTO = generateLoginResponse(profile.getPhoneNumber(), profile.getRole());
         return GoodResponse.ok(responseDTO);
+    }
+
+    @Override
+    public ResponseEntity<Response<String>> getNonce() {
+        String nonce = nonceFavor.create();
+        return GoodResponse.ok(nonce);
     }
 
     private LoginResponseDTO generateLoginResponse(String phoneNumber, ProfileRole role) {
