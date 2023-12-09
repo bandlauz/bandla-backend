@@ -32,7 +32,7 @@ public class ProfileEntity {
     @Column(name = "phone_number", nullable = false, updatable = false)
     private String phoneNumber;
 
-    @Column
+    @Column(name = "password")
     private String password;
 
     @Column(name = "photo_url")
@@ -49,7 +49,7 @@ public class ProfileEntity {
     @Column(name = "is_visible", nullable = false)
     private Boolean isVisible = true;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 

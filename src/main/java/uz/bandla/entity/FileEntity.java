@@ -25,7 +25,7 @@ public class FileEntity {
     @ManyToOne
     private ProfileEntity createdBy;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 

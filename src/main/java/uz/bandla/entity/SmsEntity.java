@@ -23,7 +23,7 @@ public class SmsEntity {
     @Column(name = "phone_number", nullable = false, updatable = false)
     private String phoneNumber;
 
-    @Column(length = 4, nullable = false, updatable = false)
+    @Column(name = "code", length = 4, nullable = false, updatable = false)
     private String code;
 
     @Column(name = "message", nullable = false, updatable = false)
@@ -36,7 +36,7 @@ public class SmsEntity {
     @Column(name = "is_used", nullable = false)
     private boolean isUsed = false;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 
