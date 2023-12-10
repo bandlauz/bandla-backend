@@ -34,3 +34,4 @@ build/
 
 ### private ###
 /.env
+/src/test/test.http

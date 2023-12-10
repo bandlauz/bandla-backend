@@ -10,28 +10,26 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "file")
-@NoArgsConstructor
+@Table(name = "nonce")
 @Getter
 @Setter
-public class FileEntity {
+@NoArgsConstructor
+public class NonceEntity {
     @Id
-    @Column(name = "id", nullable = false, unique = true)
-    private UUID id;
+    @Column(name = "id", nullable = false, updatable = false, unique = true)
+    private String id;
 
-    @Column(name = "url")
-    private String url;
+    @Column(name = "is_used", nullable = false)
+    private Boolean isUsed = false;
 
     @ManyToOne
-    private ProfileEntity createdBy;
+    private ProfileEntity profile;
 
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 
-    public FileEntity(UUID id, String url, ProfileEntity createdBy) {
+    public NonceEntity(String id) {
         this.id = id;
-        this.url = url;
-        this.createdBy = createdBy;
     }
 }

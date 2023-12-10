@@ -59,3 +59,5 @@ aws:
     stack:
       auto: ${AWS_S3_BUCKET_STACK_AUTO}
     url: https://${aws.s3.bucket.name}.s3.${aws.s3.bucket.region.static}.amazonaws.com/
+
+private.key: ${PRIVATE_KEY}
