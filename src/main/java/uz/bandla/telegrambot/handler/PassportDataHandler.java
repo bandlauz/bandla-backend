@@ -29,7 +29,6 @@ public class PassportDataHandler implements Handler<Message> {
 
     @Override
     public void handle(Message message) {
-        System.out.println("1");
         PassportData passportData = message.getPassportData();
         EncryptedCredentials encryptedCredentials = passportData.getCredentials();
         DecryptedCredentials credentials = decrypt(encryptedCredentials);
