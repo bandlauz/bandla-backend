@@ -2,6 +2,8 @@ package uz.bandla.controller;
 
 import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.Response;
+import uz.bandla.exp.NotFoundException;
+import uz.bandla.exp.NotValidException;
 import uz.bandla.exp.ResponseException;
 import uz.bandla.exp.auth.*;
 
@@ -38,7 +40,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ProfileNotFoundException.class, VerificationCodeNotValidException.class,
             PhoneNumberNotFoundException.class, PhoneNumberAlreadyRegisteredException.class,
             TokenExpiredException.class, ShortIntervalException.class, PasswordAlreadySavedException.class,
-            ProfileLockedException.class, ProfileStatusIncorrectException.class, AuthHeaderNotFoundException.class})
+            ProfileLockedException.class, ProfileStatusIncorrectException.class, AuthHeaderNotFoundException.class,
+            NotFoundException.class, NotValidException.class})
     private ResponseEntity<Response<?>> handle(ResponseException e) {
         return GoodResponse.error(e.getStatus(), e.getCode(), e.getMessage());
     }

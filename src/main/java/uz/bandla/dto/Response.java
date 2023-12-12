@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Response<T> {
-    private int code;
+    private Integer code;
     private T data;
-    private List<String> errors = new LinkedList<>();
+    private List<String> errors;
     private String message;
 
     public Response(T data) {
@@ -29,6 +29,9 @@ public class Response<T> {
     }
 
     public void addError(String error) {
+        if (errors == null) {
+            errors = new LinkedList<>();
+        }
         this.errors.add(error);
     }
 }

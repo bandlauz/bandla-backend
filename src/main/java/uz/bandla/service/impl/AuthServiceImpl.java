@@ -1,24 +1,19 @@
 package uz.bandla.service.impl;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import uz.bandla.dto.Response;
 import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.dto.auth.request.CompleteVerificationDTO;
 import uz.bandla.dto.auth.request.LoginDTO;
-import uz.bandla.dto.auth.request.TelegramLoginDTO;
-import uz.bandla.entity.TelegramUserEntity;
+import uz.bandla.entity.NonceEntity;
 import uz.bandla.enums.ProfileRole;
+import uz.bandla.exp.NotValidException;
 import uz.bandla.exp.auth.*;
+import uz.bandla.favor.NonceFavor;
 import uz.bandla.favor.ProfileFavor;
-import uz.bandla.favor.TelegramUserFavor;
 import uz.bandla.security.jwt.JwtService;
 import uz.bandla.security.profile.ProfileDetails;
 import uz.bandla.security.profile.ProfileDetailsService;
-import uz.bandla.telegrambot.service.MessageSenderService;
-import uz.bandla.telegrambot.util.ButtonUtil;
-import uz.bandla.util.AuthUtil;
 import uz.bandla.util.MD5;
 import uz.bandla.dto.auth.response.LoginResponseDTO;
 import uz.bandla.entity.ProfileEntity;
@@ -36,6 +31,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uz.bandla.util.NonceUtil;
 
 import java.util.Optional;
 
@@ -47,13 +43,10 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final VerificationService verificationService;
     private final ProfileFavor profileFavor;
-    private final TelegramUserFavor telegramUserFavor;
-    private final MessageSenderService messageSenderService;
+    private final NonceFavor nonceFavor;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    @Value("${bot.token}")
-    private String botToken;
 
     @Override
     public ResponseEntity<Response<Boolean>> isNotVerified(String phoneNumber) {
@@ -152,51 +145,21 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<Response<Boolean>> checkTelegramAccount(TelegramLoginDTO dto) {
-        checkTelegramLoginData(dto);
-
-        Optional<TelegramUserEntity> optional = telegramUserFavor.findById(dto.getId());
-        if (optional.isPresent()) {
-
-            TelegramUserEntity telegramUser = optional.get();
-            telegramUser.setFirstName(dto.getFirst_name());
-            telegramUser.setLastName(dto.getLast_name());
-            telegramUser.setUsername(dto.getUsername());
-            telegramUser.setPhotoUrl(dto.getPhoto_url());
-            telegramUserFavor.save(telegramUser);
-
-            if (telegramUser.getProfile() != null) {
-                ProfileEntity profile = telegramUser.getProfile();
-                profile.setStatus(ProfileStatus.ACTIVE);
-                profileFavor.save(profile);
-                return GoodResponse.ok(Boolean.TRUE);
-            }
-        }
-
-        TelegramUserEntity telegramUser = new TelegramUserEntity(dto.getId(), dto.getFirst_name(), dto.getLast_name(), dto.getUsername(), dto.getPhoto_url());
-        telegramUserFavor.save(telegramUser);
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setText("bandla.uz sahifasiga kirish uchun telefon raqamingizni yuboring");
-        sendMessage.setChatId(telegramUser.getId());
-        sendMessage.setReplyMarkup(ButtonUtil.getSendContactMarKup());
-
-        messageSenderService.send(sendMessage);
-
-        return GoodResponse.ok(Boolean.FALSE);
+    public ResponseEntity<Response<String>> getNonce() {
+        String nonce = nonceFavor.create();
+        return GoodResponse.ok(nonce);
     }
 
     @Override
-    public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(TelegramLoginDTO dto) {
-        checkTelegramLoginData(dto);
-
-        TelegramUserEntity telegramUser = telegramUserFavor.findByIdOrElseTrow(dto.getId());
-        if (telegramUser.getProfile() == null) {
-            throw new TelegramLoginException();
+    public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(String nonce) {
+        NonceEntity nonceEntity = nonceFavor.findByIdOrElseTrow(nonce);
+        if (!NonceUtil.isValid(nonceEntity)) {
+            throw new NotValidException("Nonce not valid");
         }
+        nonceEntity.setIsUsed(true);
+        nonceFavor.save(nonceEntity);
 
-        ProfileEntity profile = telegramUser.getProfile();
-
+        ProfileEntity profile = nonceEntity.getProfile();
         LoginResponseDTO responseDTO = generateLoginResponse(profile.getPhoneNumber(), profile.getRole());
         return GoodResponse.ok(responseDTO);
     }
@@ -210,11 +173,5 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-    }
-
-    private void checkTelegramLoginData(TelegramLoginDTO dto) {
-        if (!AuthUtil.checkTelegramAuthorization(dto, botToken)) {
-            throw new TelegramLoginException("Telegram login exception");
-        }
     }
 }
