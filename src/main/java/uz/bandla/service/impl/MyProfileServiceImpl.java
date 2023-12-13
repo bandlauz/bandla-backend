@@ -1,10 +1,12 @@
 package uz.bandla.service.impl;
 
+import org.springframework.context.annotation.Profile;
 import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.Response;
 import uz.bandla.dto.profile.MyProfileDTO;
 import uz.bandla.dto.profile.MyProfileResponseDTO;
 import uz.bandla.entity.ProfileEntity;
+import uz.bandla.favor.ProfileFavor;
 import uz.bandla.mapper.MyProfileMapper;
 import uz.bandla.service.MyProfileService;
 import uz.bandla.util.ProfileUtil;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MyProfileServiceImpl implements MyProfileService {
     private final MyProfileMapper myProfileMapper;
+    private final ProfileFavor profileFavor;
 
     @Override
     public ResponseEntity<Response<MyProfileResponseDTO>> get() {
@@ -30,6 +33,8 @@ public class MyProfileServiceImpl implements MyProfileService {
         profile.setFirstName(dto.getFirstName());
         profile.setLastName(dto.getLastName());
         profile.setPhotoUrl(dto.getPhotoUrl());
+
+        profileFavor.save(profile);
 
         return GoodResponse.ok(myProfileMapper.map(profile));
     }
