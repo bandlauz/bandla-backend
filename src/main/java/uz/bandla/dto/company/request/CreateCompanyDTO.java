@@ -1,9 +1,8 @@
-package uz.bandla.user_panel.dto.company.request;
-
-import uz.bandla.annotations.validation.Url;
+package uz.bandla.dto.company.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import uz.bandla.annotations.validation.Url;
 
 @Getter
 public class CreateCompanyDTO {

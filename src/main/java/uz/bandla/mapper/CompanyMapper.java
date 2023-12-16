@@ -1,8 +1,8 @@
-package uz.bandla.user_panel.mapper;
+package uz.bandla.mapper;
 
 import uz.bandla.entity.CompanyEntity;
-import uz.bandla.user_panel.dto.company.request.CreateCompanyDTO;
-import uz.bandla.user_panel.dto.company.response.CompanyDTO;
+import uz.bandla.dto.company.request.CreateCompanyDTO;
+import uz.bandla.dto.company.response.CompanyDTO;
 
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class CompanyMapper {
     }
 
     public CompanyDTO map(CompanyEntity company) {
-        return new CompanyDTO(company.getName(),
+        return new CompanyDTO(company.getId(), company.getName(),
                 company.getAddress(),
                 company.getPhotoUrl(),
                 company.getStatus(),

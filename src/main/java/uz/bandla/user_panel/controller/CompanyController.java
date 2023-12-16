@@ -1,8 +1,8 @@
 package uz.bandla.user_panel.controller;
 
 import uz.bandla.dto.Response;
-import uz.bandla.user_panel.dto.company.request.CreateCompanyDTO;
-import uz.bandla.user_panel.dto.company.response.CompanyDTO;
+import uz.bandla.dto.company.request.CreateCompanyDTO;
+import uz.bandla.dto.company.response.CompanyDTO;
 import uz.bandla.user_panel.service.CompanyService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("UserCompanyController")
 @RequestMapping("/api/user-panel/company")
 @RequiredArgsConstructor
 @Tag(name = "Company controller")

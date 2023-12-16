@@ -1,4 +1,4 @@
-package uz.bandla.sysadmin_panel;
+package uz.bandla.sysadmin_panel.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
