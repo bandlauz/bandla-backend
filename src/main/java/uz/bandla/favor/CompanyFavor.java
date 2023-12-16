@@ -1,7 +1,5 @@
 package uz.bandla.favor;
 
-import org.springframework.http.ResponseEntity;
-import uz.bandla.dto.Response;
 import uz.bandla.dto.company.response.CompanyDTO;
 import uz.bandla.entity.CompanyEntity;
 import uz.bandla.entity.ProfileEntity;
