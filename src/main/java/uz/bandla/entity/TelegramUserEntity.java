@@ -2,6 +2,7 @@ package uz.bandla.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "telegram_user")
 @Getter
 @Setter
+@NoArgsConstructor
 public class TelegramUserEntity {
     @Id
     @Column(unique = true, nullable = false, updatable = false)
@@ -37,7 +39,7 @@ public class TelegramUserEntity {
     @Column(name = "is_visible")
     private Boolean isVisible = true;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 
@@ -50,8 +52,5 @@ public class TelegramUserEntity {
         this.lastName = lastName;
         this.username = username;
         this.photoUrl = photoUrl;
-    }
-
-    public TelegramUserEntity() {
     }
 }
