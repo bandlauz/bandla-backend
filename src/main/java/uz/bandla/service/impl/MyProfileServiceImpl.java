@@ -1,6 +1,5 @@
 package uz.bandla.service.impl;
 
-import org.springframework.context.annotation.Profile;
 import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.Response;
 import uz.bandla.dto.profile.MyProfileDTO;
