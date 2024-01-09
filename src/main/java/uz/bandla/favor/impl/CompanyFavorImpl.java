@@ -1,10 +1,13 @@
-package uz.bandla.user_panel.favor.impl;
+package uz.bandla.favor.impl;
 
 import uz.bandla.annotations.Favor;
+import uz.bandla.dto.company.response.CompanyDTO;
 import uz.bandla.entity.CompanyEntity;
 import uz.bandla.entity.ProfileEntity;
-import uz.bandla.user_panel.favor.CompanyFavor;
 import uz.bandla.repository.CompanyRepository;
+import uz.bandla.favor.CompanyFavor;
+
+import java.util.List;
 
 @Favor
 public class CompanyFavorImpl implements CompanyFavor {
@@ -23,5 +26,10 @@ public class CompanyFavorImpl implements CompanyFavor {
     @Override
     public boolean hasCompany(ProfileEntity profile) {
         return repository.existsByAdmin(profile);
+    }
+
+    @Override
+    public List<CompanyDTO> getList() {
+        return repository.getShortInfoList();
     }
 }

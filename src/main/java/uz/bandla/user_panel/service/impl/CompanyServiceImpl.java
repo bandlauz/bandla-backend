@@ -5,10 +5,10 @@ import uz.bandla.dto.Response;
 import uz.bandla.entity.CompanyEntity;
 import uz.bandla.entity.ProfileEntity;
 import uz.bandla.exp.CompanyExistsException;
-import uz.bandla.user_panel.favor.CompanyFavor;
-import uz.bandla.user_panel.dto.company.request.CreateCompanyDTO;
-import uz.bandla.user_panel.dto.company.response.CompanyDTO;
-import uz.bandla.user_panel.mapper.CompanyMapper;
+import uz.bandla.favor.CompanyFavor;
+import uz.bandla.dto.company.request.CreateCompanyDTO;
+import uz.bandla.dto.company.response.CompanyDTO;
+import uz.bandla.mapper.CompanyMapper;
 import uz.bandla.user_panel.service.CompanyService;
 import uz.bandla.util.ProfileUtil;
 

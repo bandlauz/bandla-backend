@@ -1,8 +1,8 @@
 package uz.bandla.user_panel.service;
 
 import uz.bandla.dto.Response;
-import uz.bandla.user_panel.dto.company.request.CreateCompanyDTO;
-import uz.bandla.user_panel.dto.company.response.CompanyDTO;
+import uz.bandla.dto.company.request.CreateCompanyDTO;
+import uz.bandla.dto.company.response.CompanyDTO;
 
 import org.springframework.http.ResponseEntity;
 

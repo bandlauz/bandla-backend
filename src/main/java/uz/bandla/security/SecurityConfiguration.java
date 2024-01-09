@@ -54,11 +54,11 @@ public class SecurityConfiguration {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                        .requestMatchers("/", "/main","/error", "/auth/**").permitAll()
-                        .requestMatchers("/api/profile/my/**").hasAnyAuthority(ProfileRole.USER.name(), ProfileRole.MANAGER.name(), ProfileRole.ADMIN.name(), ProfileRole.SUPER_ADMIN.name())
+                        .requestMatchers("/", "/main", "/error", "/auth/**").permitAll()
+                        .requestMatchers("/api/profile/my/**").hasAnyAuthority(ProfileRole.USER.name(), ProfileRole.MANAGER.name(), ProfileRole.ADMIN.name(), ProfileRole.SYSTEM_ADMIN.name())
                         .requestMatchers("/api/user-panel/**").hasAuthority(ProfileRole.USER.name())
-                        .requestMatchers("/api/business-panel/**").hasAnyAuthority(ProfileRole.MANAGER.name(),ProfileRole.ADMIN.name())
-                        .requestMatchers("/api/super-admin-panel/**").hasAuthority(ProfileRole.SUPER_ADMIN.name())
+                        .requestMatchers("/api/business-panel/**").hasAnyAuthority(ProfileRole.MANAGER.name(), ProfileRole.ADMIN.name())
+                        .requestMatchers("/api/sysadmin-panel/**").hasAuthority(ProfileRole.SYSTEM_ADMIN.name())
                         .requestMatchers("/api/admin-panel/**").hasAuthority(ProfileRole.ADMIN.name())
                         .anyRequest().authenticated());
 
