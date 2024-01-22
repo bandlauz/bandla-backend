@@ -5,8 +5,8 @@ import uz.bandla.entity.SmsEntity;
 import java.time.LocalDateTime;
 
 public class VerificationUtil {
-    private static boolean isAfter2Minutes(LocalDateTime dateTime) {
-        return dateTime.plusMinutes(2).isAfter(LocalDateTime.now());
+    private static boolean isAfterMinute(LocalDateTime dateTime) {
+        return dateTime.plusMinutes(1).isAfter(LocalDateTime.now());
     }
 
     public static boolean isValid(SmsEntity sms, String code) {
@@ -16,6 +16,6 @@ public class VerificationUtil {
     }
 
     public static boolean isShortInterval(LocalDateTime createdDate) {
-        return VerificationUtil.isAfter2Minutes(createdDate);
+        return VerificationUtil.isAfterMinute(createdDate);
     }
 }
