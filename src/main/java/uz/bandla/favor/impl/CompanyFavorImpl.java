@@ -4,6 +4,7 @@ import uz.bandla.annotations.Favor;
 import uz.bandla.dto.company.response.CompanyDTO;
 import uz.bandla.entity.CompanyEntity;
 import uz.bandla.entity.ProfileEntity;
+import uz.bandla.enums.CompanyStatus;
 import uz.bandla.repository.CompanyRepository;
 import uz.bandla.favor.CompanyFavor;
 
@@ -31,5 +32,15 @@ public class CompanyFavorImpl implements CompanyFavor {
     @Override
     public List<CompanyDTO> getList() {
         return repository.getShortInfoList();
+    }
+
+    @Override
+    public void updateStatus(Integer id, CompanyStatus status) {
+        repository.updateStatusById(id, status);
+    }
+
+    @Override
+    public CompanyEntity findById(Integer id) {
+        return repository.findById(id).orElseThrow();
     }
 }

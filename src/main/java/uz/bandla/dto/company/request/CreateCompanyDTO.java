@@ -10,6 +10,6 @@ public class CreateCompanyDTO {
     String name;
     @NotBlank(message = "Address required")
     String address;
-    @Url
+    @Url(canBeNull = true)
     String photoUrl;
 }
