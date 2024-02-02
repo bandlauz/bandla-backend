@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface CompanyService {
     ResponseEntity<Response<List<CompanyDTO>>> getList();
+    void confirm(Integer id);
 }
