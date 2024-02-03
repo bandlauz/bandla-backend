@@ -21,6 +21,10 @@ public class GoodResponse {
         return ResponseEntity.status(status).body(new Response<>(code, error));
     }
 
+    public static <T> ResponseEntity<Response<?>> error(HttpStatus status, int code, String error, T data) {
+        return ResponseEntity.status(status).body(new Response<>(code, error, data));
+    }
+
     public static ResponseEntity<Response<?>> badRequest(String message) {
         return ResponseEntity.badRequest().body(new Response<>(101, message));
     }

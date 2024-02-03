@@ -40,11 +40,16 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ProfileNotFoundException.class, VerificationCodeNotValidException.class,
             PhoneNumberNotFoundException.class, PhoneNumberAlreadyRegisteredException.class,
-            TokenExpiredException.class, ShortIntervalException.class, PasswordAlreadySavedException.class,
+            TokenExpiredException.class, PasswordAlreadySavedException.class,
             ProfileLockedException.class, ProfileStatusIncorrectException.class, AuthHeaderNotFoundException.class,
             NotFoundException.class, NotValidException.class, IncorrectStatusException.class})
     private ResponseEntity<Response<?>> handle(ResponseException e) {
         return GoodResponse.error(e.getStatus(), e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(ShortIntervalException.class)
+    private ResponseEntity<Response<?>> handle(ShortIntervalException e) {
+        return GoodResponse.error(e.getStatus(), e.getCode(), e.getMessage(), e.getWaitTime());
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
