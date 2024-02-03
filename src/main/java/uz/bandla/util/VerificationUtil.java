@@ -3,9 +3,10 @@ package uz.bandla.util;
 import uz.bandla.entity.SmsEntity;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class VerificationUtil {
-    private static boolean isAfterMinute(LocalDateTime dateTime) {
+    private static boolean isShortInterval(LocalDateTime dateTime) {
         return dateTime.plusMinutes(1).isAfter(LocalDateTime.now());
     }
 
@@ -15,7 +16,7 @@ public class VerificationUtil {
                 !sms.isUsed();
     }
 
-    public static boolean isShortInterval(LocalDateTime createdDate) {
-        return VerificationUtil.isAfterMinute(createdDate);
+    public static long diffSeconds(LocalDateTime dateTime) {
+        return ChronoUnit.SECONDS.between(dateTime.plusMinutes(1), LocalDateTime.now());
     }
 }
