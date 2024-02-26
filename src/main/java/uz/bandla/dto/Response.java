@@ -25,6 +25,12 @@ public class Response<T> {
         addError(error);
     }
 
+    public Response(int code, String error, T data) {
+        this.code = code;
+        this.data = data;
+        addError(error);
+    }
+
     public Response() {
     }
 

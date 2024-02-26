@@ -25,9 +25,11 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public void sendConfirmationCode(String phoneNumber) {
         Optional<SmsEntity> optional = getLastSmsVerification(phoneNumber);
-        if (optional.isPresent() &&
-                VerificationUtil.isShortInterval(optional.get().getCreatedDate())) {
-            throw new ShortIntervalException("Short interval exception");
+        if (optional.isPresent()) {
+            long seconds = VerificationUtil.diffSeconds(optional.get().getCreatedDate());
+            if (seconds < 0) {
+                throw new ShortIntervalException("Short interval exception", Math.abs(seconds));
+            }
         }
 
         String code = RandomUtil.generateSmsCode();
