@@ -37,4 +37,14 @@ public class MyProfileServiceImpl implements MyProfileService {
 
         return GoodResponse.ok(myProfileMapper.map(profile));
     }
+
+    @Override
+    public ResponseEntity<Response<MyProfileResponseDTO>> updatePhoto(String photoUrl) {
+        ProfileEntity profile = ProfileUtil.getProfile();
+        profile.setPhotoUrl(photoUrl);
+
+        profileFavor.save(profile);
+
+        return GoodResponse.ok(myProfileMapper.map(profile));
+    }
 }
