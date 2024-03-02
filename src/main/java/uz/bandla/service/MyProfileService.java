@@ -10,4 +10,6 @@ public interface MyProfileService {
     ResponseEntity<Response<MyProfileResponseDTO>> get();
 
     ResponseEntity<Response<MyProfileResponseDTO>> update(MyProfileDTO dto);
+
+    ResponseEntity<Response<MyProfileResponseDTO>> updatePhoto(String photoUrl);
 }
