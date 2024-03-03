@@ -1,9 +1,9 @@
 package uz.bandla.controller;
 
 import uz.bandla.dto.Response;
-import uz.bandla.annotations.validation.Url;
 import uz.bandla.dto.profile.MyProfileDTO;
 import uz.bandla.dto.profile.MyProfileResponseDTO;
+import uz.bandla.dto.profile.PhotoDTO;
 import uz.bandla.service.MyProfileService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,11 +36,11 @@ public class MyProfileController {
     public ResponseEntity<Response<MyProfileResponseDTO>> update(@RequestBody @Valid MyProfileDTO dto) {
         return service.update(dto);
     }
+
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Update profile photo")
-    @PutMapping(value = {"/update-photo/{photoUrl}","/update-photo"})
-    public ResponseEntity<Response<MyProfileResponseDTO>> updatePhoto(
-            @PathVariable(value = "photoUrl",required = false) @Url(canBeNull = true) String photoUrl) {
-        return service.updatePhoto(photoUrl);
+    @PutMapping("/update-photo")
+    public ResponseEntity<Response<MyProfileResponseDTO>> updatePhoto(@RequestBody @Valid PhotoDTO dto) {
+        return service.updatePhoto(dto.getPhotoUrl());
     }
 }
