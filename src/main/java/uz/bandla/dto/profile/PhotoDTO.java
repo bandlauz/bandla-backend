@@ -6,6 +6,6 @@ import uz.bandla.annotations.validation.Url;
 @Getter
 public class PhotoDTO {
 
-    @Url(canBeNull = true)
+    @Url(canBeNull = true, message = "Photo url invalid")
     private String photoUrl;
 }
