@@ -1,7 +1,6 @@
 package uz.bandla.dto.profile;
 
 import uz.bandla.annotations.validation.NullOrNotBlank;
-import uz.bandla.annotations.validation.Url;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -15,7 +14,4 @@ public class MyProfileDTO {
 
     @NullOrNotBlank(message = "Last name invalid")
     private String lastName;
-
-    @Url(canBeNull = true, message = "Photo url invalid")
-    private String photoUrl;
 }

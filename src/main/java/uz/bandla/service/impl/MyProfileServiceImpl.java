@@ -31,7 +31,6 @@ public class MyProfileServiceImpl implements MyProfileService {
         ProfileEntity profile = ProfileUtil.getProfile();
         profile.setFirstName(dto.getFirstName());
         profile.setLastName(dto.getLastName());
-        profile.setPhotoUrl(dto.getPhotoUrl());
 
         profileFavor.save(profile);
 
