@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
@@ -34,5 +36,13 @@ public class CompanyServiceImpl implements CompanyService {
 
         companyFavor.save(company);
         return GoodResponse.ok(companyMapper.map(company));
+    }
+
+    @Override
+    public ResponseEntity<Response<CompanyDTO>> find() {
+        ProfileEntity profile = ProfileUtil.getProfile();
+        Optional<CompanyEntity> optionalEntity = companyFavor.findByAdminId(profile.getId());
+
+        return GoodResponse.ok(companyMapper.map(optionalEntity));
     }
 }

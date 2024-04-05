@@ -6,6 +6,8 @@ import uz.bandla.dto.company.response.CompanyDTO;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class CompanyMapper {
     public CompanyEntity map(CreateCompanyDTO dto) {
@@ -20,5 +22,9 @@ public class CompanyMapper {
                 company.getPhotoUrl(),
                 company.getStatus(),
                 company.getCreatedDate());
+    }
+
+    public CompanyDTO map(Optional<CompanyEntity> optional) {
+        return optional.map(this::map).orElse(null);
     }
 }

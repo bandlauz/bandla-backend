@@ -8,4 +8,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface CompanyService {
     ResponseEntity<Response<CompanyDTO>> create(CreateCompanyDTO dto);
+
+    ResponseEntity<Response<CompanyDTO>> find();
 }

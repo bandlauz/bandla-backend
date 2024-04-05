@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +29,12 @@ public class CompanyController {
     @PostMapping("/create")
     public ResponseEntity<Response<CompanyDTO>> create(@RequestBody @Valid CreateCompanyDTO dto) {
         return service.create(dto);
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Get company list")
+    @GetMapping("/find")
+    public ResponseEntity<Response<CompanyDTO>> find() {
+        return service.find();
     }
 }
