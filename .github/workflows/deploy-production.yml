@@ -1,0 +1,45 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [ production ]
+  workflow_dispatch:
+
+jobs:
+  build_and_push:
+    name: Build & Push to DockerHub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Docker Build and Push to DockerHub
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: nazarovv2/bandla:latest
+
+  deploy_to_droplet:
+    runs-on: ubuntu-latest
+    needs: build_and_push
+    name: Deploy to Droplet
+    steps:
+      - name: Connect with SSH and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PASSWORD }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd bandla
+            docker-compose stop bandla-app
+            docker rm bandla
+            docker pull nazarovv2/bandla:latest
+            docker-compose up -d bandla-app
+            docker ps -a
