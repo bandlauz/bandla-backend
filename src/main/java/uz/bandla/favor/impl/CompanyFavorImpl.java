@@ -9,6 +9,7 @@ import uz.bandla.repository.CompanyRepository;
 import uz.bandla.favor.CompanyFavor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Favor
 public class CompanyFavorImpl implements CompanyFavor {
@@ -42,5 +43,10 @@ public class CompanyFavorImpl implements CompanyFavor {
     @Override
     public CompanyEntity findById(Integer id) {
         return repository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public Optional<CompanyEntity> findByAdminId(Integer adminId) {
+        return repository.findByAdmin_Id(adminId);
     }
 }

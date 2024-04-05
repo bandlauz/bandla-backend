@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer> {
@@ -29,4 +30,6 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
             "set w.status = :status " +
             "where w.id = :id")
     void updateStatusById(@Param("id") Integer id, @Param("status") CompanyStatus status);
+
+    Optional<CompanyEntity> findByAdmin_Id(Integer adminId);
 }

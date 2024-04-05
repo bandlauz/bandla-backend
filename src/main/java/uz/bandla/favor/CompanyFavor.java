@@ -6,6 +6,7 @@ import uz.bandla.entity.ProfileEntity;
 import uz.bandla.enums.CompanyStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CompanyFavor {
     void save(CompanyEntity entity);
@@ -17,4 +18,6 @@ public interface CompanyFavor {
     void updateStatus(Integer id,CompanyStatus status);
 
     CompanyEntity findById(Integer id);
+
+    Optional<CompanyEntity> findByAdminId(Integer id);
 }

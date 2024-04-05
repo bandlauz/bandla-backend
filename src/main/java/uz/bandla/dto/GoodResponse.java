@@ -11,6 +11,10 @@ public class GoodResponse {
         return ResponseEntity.ok(response);
     }
 
+    public static <T> ResponseEntity<Response<T>> ok() {
+        return ResponseEntity.ok().build();
+    }
+
     public static <T> ResponseEntity<Response<T>> ok(T data) {
         Response<T> response = new Response<>();
         response.setData(data);
