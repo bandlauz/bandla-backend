@@ -1,13 +1,12 @@
 package uz.bandla.telegrambot.handler;
 
-import uz.bandla.util.NonceUtil;
+import uz.bandla.annotations.Handler;
 import uz.bandla.entity.NonceEntity;
 import uz.bandla.entity.ProfileEntity;
 import uz.bandla.enums.ProfileStatus;
 import uz.bandla.exp.NotValidException;
 import uz.bandla.repository.NonceRepository;
 import uz.bandla.repository.ProfileRepository;
-import uz.bandla.telegrambot.handler.interfaces.Handler;
 import uz.bandla.telegrambot.passport.decrypt.DecryptCredentialsUtil;
 import uz.bandla.telegrambot.passport.decrypt.DecryptedCredentials;
 
@@ -16,18 +15,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.passport.EncryptedCredentials;
 import org.telegram.telegrambots.meta.api.objects.passport.PassportData;
+import uz.bandla.util.NonceUtil;
 
 import java.util.Optional;
 
-@uz.bandla.annotations.Handler
+@Handler
 @RequiredArgsConstructor
-public class PassportDataHandler implements Handler<Message> {
+public class PassportDataHandler {
     @Value("${private.key}")
     private String privateKey;
     private final NonceRepository nonceRepository;
     private final ProfileRepository profileRepository;
 
-    @Override
     public void handle(Message message) {
         PassportData passportData = message.getPassportData();
         EncryptedCredentials encryptedCredentials = passportData.getCredentials();

@@ -1,10 +1,12 @@
 package uz.bandla.telegrambot.handler;
 
+import uz.bandla.annotations.Handler;
+
 import lombok.RequiredArgsConstructor;
 import io.github.nazarovctrl.telegrambotspring.controller.AbstractUpdateController;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-@uz.bandla.annotations.Handler
+@Handler
 @RequiredArgsConstructor
 public class UpdateHandler extends AbstractUpdateController {
     private final MessageHandler messageHandler;
