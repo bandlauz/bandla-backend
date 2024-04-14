@@ -23,29 +23,29 @@ public class ContactHandler {
     private final MessageSenderService messageSenderService;
 
     public void handle(Message message) {
-        Contact contact = message.getContact();
-
-        Optional<TelegramUserEntity> optional = telegramUserRepository.findById(message.getChatId());
-        if (optional.isEmpty()) {
-            return;
-        }
-
-        TelegramUserEntity telegramUser = optional.get();
-        telegramUser.setPhoneNumber(contact.getPhoneNumber());
-
-        ProfileEntity profile = new ProfileEntity(telegramUser.getFirstName(), telegramUser.getLastName(), telegramUser.getPhoneNumber(), telegramUser.getPhotoUrl());
-        profileRepository.save(profile);
-
-        telegramUser.setProfile(profile);
-        telegramUserRepository.save(telegramUser);
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(message.getChatId());
-        sendMessage.setText("""
-                Muvaffaqiyatli ro‘yxatdan o‘tdingiz!
-                bandla.uz sahifasiga qaytib yana bir bor
-                telegram orqali kirishga bosing""");
-        sendMessage.setReplyMarkup(ButtonUtil.getKeyboardRemove());
-        messageSenderService.send(sendMessage);
+//        Contact contact = message.getContact();
+//
+//        Optional<TelegramUserEntity> optional = telegramUserRepository.findById(message.getChatId());
+//        if (optional.isEmpty()) {
+//            return;
+//        }
+//
+//        TelegramUserEntity telegramUser = optional.get();
+//        telegramUser.setPhoneNumber(contact.getPhoneNumber());
+//
+//        ProfileEntity profile = new ProfileEntity(telegramUser.getFirstName(), telegramUser.getLastName(), telegramUser.getPhoneNumber(), telegramUser.getPhotoUrl());
+//        profileRepository.save(profile);
+//
+//        telegramUser.setProfile(profile);
+//        telegramUserRepository.save(telegramUser);
+//
+//        SendMessage sendMessage = new SendMessage();
+//        sendMessage.setChatId(message.getChatId());
+//        sendMessage.setText("""
+//                Muvaffaqiyatli ro‘yxatdan o‘tdingiz!
+//                bandla.uz sahifasiga qaytib yana bir bor
+//                telegram orqali kirishga bosing""");
+//        sendMessage.setReplyMarkup(ButtonUtil.getKeyboardRemove());
+//        messageSenderService.send(sendMessage);
     }
 }
