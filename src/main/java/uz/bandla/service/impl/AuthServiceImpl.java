@@ -9,8 +9,8 @@ import uz.bandla.entity.NonceEntity;
 import uz.bandla.enums.ProfileRole;
 import uz.bandla.exp.NotValidException;
 import uz.bandla.exp.auth.*;
-import uz.bandla.favor.NonceFavor;
-import uz.bandla.favor.ProfileFavor;
+import uz.bandla.repository.NonceRepository;
+import uz.bandla.repository.ProfileRepository;
 import uz.bandla.security.jwt.JwtService;
 import uz.bandla.security.profile.ProfileDetails;
 import uz.bandla.security.profile.ProfileDetailsService;
@@ -42,15 +42,15 @@ public class AuthServiceImpl implements AuthService {
     private final ProfileDetailsService profileDetailsService;
     private final JwtService jwtService;
     private final VerificationService verificationService;
-    private final ProfileFavor profileFavor;
-    private final NonceFavor nonceFavor;
+    private final ProfileRepository profileRepository;
+    private final NonceRepository nonceRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
 
     @Override
     public ResponseEntity<Response<Boolean>> isNotVerified(String phoneNumber) {
-        Optional<ProfileEntity> optional = profileFavor.findByPhoneNumber(phoneNumber);
+        Optional<ProfileEntity> optional = profileRepository.findByPhoneNumberAndIsVisibleTrue(phoneNumber);
 
         if (optional.isPresent()) {
             ProfileEntity profile = optional.get();
@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
         } else {
             ProfileEntity profile = new ProfileEntity();
             profile.setPhoneNumber(phoneNumber);
-            profileFavor.save(profile);
+            profileRepository.save(profile);
         }
 
         return GoodResponse.ok(Boolean.TRUE);
@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<Response<?>> sendConfirmationCode(String phoneNumber) {
-        profileFavor.findByPhoneNumberOrElseThrow(phoneNumber);
+        profileRepository.existsByPhoneNumberAndIsVisibleTrueOrElseThrow(phoneNumber);
 
         verificationService.sendConfirmationCode(phoneNumber);
         return GoodResponse.okMessage("SUCCESS");
@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<Response<String>> checkConfirmationCode(CheckConfirmationCodeDTO dto) {
-        ProfileEntity profile = profileFavor.findByPhoneNumberOrElseThrow(dto.getPhoneNumber());
+        ProfileEntity profile = profileRepository.getByPhoneNumberAndIsVisibleTrue(dto.getPhoneNumber());
         if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
             throw new ProfileStatusIncorrectException();
         }
@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String username = jwtService.extractTemporaryTokenUsername(temporaryToken);
-        ProfileEntity profile = profileFavor.findByPhoneNumberOrElseThrow(username);
+        ProfileEntity profile = profileRepository.getByPhoneNumberAndIsVisibleTrue(username);
         if (!profile.getStatus().equals(ProfileStatus.NOT_VERIFIED)) {
             throw new ProfileStatusIncorrectException();
         }
@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String password = passwordEncoder.encode(MD5.encode(dto.getPassword()));
-        profileFavor.savePassword(profile.getId(), password);
+        profileRepository.savePasswordById(profile.getId(), password);
 
         return GoodResponse.okMessage("SUCCESS");
     }
@@ -128,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthHeaderNotFoundException();
         }
 
-        String refreshToken = authorizationHeader.substring("Bearer ".length());
+        String refreshToken = authorizationHeader.substring("Bearer " .length());
         if (jwtService.isTokenExpired(refreshToken)) {
             throw new TokenExpiredException(jwtService.getTokenExpiredMessage(refreshToken));
         }
@@ -146,18 +146,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<Response<String>> getNonce() {
-        String nonce = nonceFavor.create();
-        return GoodResponse.ok(nonce);
+        NonceEntity nonceEntity = new NonceEntity();
+
+        nonceEntity = nonceRepository.save(nonceEntity);
+
+        return GoodResponse.ok(nonceEntity.getId());
     }
 
     @Override
     public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(String nonce) {
-        NonceEntity nonceEntity = nonceFavor.findByIdOrElseTrow(nonce);
+        NonceEntity nonceEntity = nonceRepository.getReferenceById(nonce);
         if (!NonceUtil.isValid(nonceEntity) || nonceEntity.getProfile() == null) {
             throw new NotValidException("Nonce not valid");
         }
         nonceEntity.setIsUsed(true);
-        nonceFavor.save(nonceEntity);
+        nonceRepository.save(nonceEntity);
 
         ProfileEntity profile = nonceEntity.getProfile();
         LoginResponseDTO responseDTO = generateLoginResponse(profile.getPhoneNumber(), profile.getRole());
