@@ -4,8 +4,8 @@ import uz.bandla.dto.GoodResponse;
 import uz.bandla.dto.Response;
 import uz.bandla.dto.file.FileDTO;
 import uz.bandla.entity.FileEntity;
-import uz.bandla.favor.FileFavor;
 import uz.bandla.mapper.FileMapper;
+import uz.bandla.repository.FileRepository;
 import uz.bandla.service.FileService;
 import uz.bandla.service.StorageService;
 import uz.bandla.util.ProfileUtil;
@@ -24,7 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
     private final StorageService storageService;
-    private final FileFavor fileFavor;
+    private final FileRepository fileRepository;
     private final FileMapper fileMapper;
 
     @Value("${aws.s3.url}")
@@ -45,7 +45,7 @@ public class FileServiceImpl implements FileService {
         }
 
         FileEntity entity = new FileEntity(id, url, ProfileUtil.getProfile());
-        fileFavor.save(entity);
+        fileRepository.save(entity);
 
         return GoodResponse.ok(fileMapper.map(entity));
     }
