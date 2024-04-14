@@ -1,18 +1,17 @@
 package uz.bandla.telegrambot.handler;
 
-import uz.bandla.telegrambot.handler.interfaces.Handler;
+import uz.bandla.annotations.Handler;
 
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-@uz.bandla.annotations.Handler
+@Handler
 @RequiredArgsConstructor
-public class MessageHandler implements Handler<Message> {
+public class MessageHandler{
     private final TextHandler textHandler;
     private final ContactHandler contactHandler;
     private final PassportDataHandler passportDataHandler;
 
-    @Override
     public void handle(Message message) {
         if (message.hasText()) {
             textHandler.handle(message);
