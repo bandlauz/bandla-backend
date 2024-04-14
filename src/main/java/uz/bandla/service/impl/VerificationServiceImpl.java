@@ -4,7 +4,7 @@ import uz.bandla.dto.auth.request.CheckConfirmationCodeDTO;
 import uz.bandla.entity.SmsEntity;
 import uz.bandla.exp.auth.ShortIntervalException;
 import uz.bandla.exp.auth.VerificationCodeNotValidException;
-import uz.bandla.favor.SmsFavor;
+import uz.bandla.repository.SmsRepository;
 import uz.bandla.util.RandomUtil;
 import uz.bandla.util.VerificationUtil;
 import uz.bandla.enums.SmsType;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VerificationServiceImpl implements VerificationService {
     private final SmsService smsService;
-    private final SmsFavor smsFavor;
+    private final SmsRepository smsRepository;
 
     @Override
     public void sendConfirmationCode(String phoneNumber) {
@@ -49,10 +49,10 @@ public class VerificationServiceImpl implements VerificationService {
 
         SmsEntity sms = optional.get();
         sms.setUsed(true);
-        smsFavor.save(sms);
+        smsRepository.save(sms);
     }
 
     private Optional<SmsEntity> getLastSmsVerification(String phoneNumber) {
-        return smsFavor.getLastSms(phoneNumber, SmsType.VERIFICATION);
+        return smsRepository.findFirstByPhoneNumberAndTypeOrderByCreatedDateDesc(phoneNumber, SmsType.VERIFICATION);
     }
 }

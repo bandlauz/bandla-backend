@@ -1,21 +1,21 @@
 package uz.bandla.security.profile;
 
-import uz.bandla.favor.ProfileFavor;
 import uz.bandla.entity.ProfileEntity;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import uz.bandla.repository.ProfileRepository;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileDetailsService implements UserDetailsService {
-    private final ProfileFavor profileFavor;
+    private final ProfileRepository profileRepository;
 
     @Override
     public UserDetails loadUserByUsername(String phoneNumber) {
-        ProfileEntity profile = profileFavor.findByPhoneNumberOrElseThrow(phoneNumber);
+        ProfileEntity profile = profileRepository.getByPhoneNumberAndIsVisibleTrue(phoneNumber);
         return new ProfileDetails(profile);
     }
 }

@@ -13,7 +13,6 @@ import java.util.UUID;
 @Table(name = "nonce")
 @Getter
 @Setter
-@NoArgsConstructor
 public class NonceEntity {
     @Id
     @Column(name = "id", nullable = false, updatable = false, unique = true)
@@ -29,7 +28,7 @@ public class NonceEntity {
     @CreationTimestamp
     private LocalDateTime createdDate;
 
-    public NonceEntity(String id) {
-        this.id = id;
+    public NonceEntity() {
+        this.id = UUID.randomUUID().toString();
     }
 }
