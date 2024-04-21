@@ -26,7 +26,7 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
             } else if (Character.isDigit(c)) {
                 messages.remove(ValidMessageTypes.DIGIT);
             }
-            if (messages.size() == 0) {
+            if (messages.isEmpty()) {
                 return true;
             }
         }
