@@ -6,7 +6,7 @@ import uz.bandla.dto.company.response.CompanyDTO;
 import uz.bandla.entity.CompanyEntity;
 import uz.bandla.enums.CompanyStatus;
 import uz.bandla.exp.IncorrectStatusException;
-import uz.bandla.favor.CompanyFavor;
+import uz.bandla.repository.CompanyRepository;
 import uz.bandla.sysadmin_panel.service.CompanyService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,21 +19,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
-    private final CompanyFavor companyFavor;
+    private final CompanyRepository companyRepository;
 
     @Override
     public ResponseEntity<Response<List<CompanyDTO>>> getList() {
-        List<CompanyDTO> entityList = companyFavor.getList();
+        List<CompanyDTO> entityList = companyRepository.getShortInfoList();
         return GoodResponse.ok(entityList);
     }
 
     @Override
     public void confirm(Integer id) {
-        CompanyEntity entity = companyFavor.findById(id);
-        if (entity.getStatus() != CompanyStatus.CREATED){
-            throw  new IncorrectStatusException("Company status incorrect");
+        CompanyEntity entity = companyRepository.getReferenceById(id);
+        if (entity.getStatus() != CompanyStatus.CREATED) {
+            throw new IncorrectStatusException("Company status incorrect");
         }
 
-        companyFavor.updateStatus(id, CompanyStatus.CONFIRMED);
+        companyRepository.updateStatusById(id, CompanyStatus.CONFIRMED);
     }
 }

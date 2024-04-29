@@ -10,14 +10,14 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
     private final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-    private final String regex = "\\d+";
 
     @Override
     public boolean isValid(String phoneNumberField, ConstraintValidatorContext context) {
         if (phoneNumberField == null || phoneNumberField.isBlank()) {
             return false;
         }
-        if (!phoneNumberField.matches(regex)) {
+        final String REGEX = "\\d+";
+        if (!phoneNumberField.matches(REGEX)) {
             return false;
         }
         phoneNumberField = "+" + phoneNumberField;

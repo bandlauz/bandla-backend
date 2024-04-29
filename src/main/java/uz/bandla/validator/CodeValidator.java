@@ -25,7 +25,7 @@ public class CodeValidator implements ConstraintValidator<Code, String> {
         } catch (RuntimeException ignored) {
         }
 
-        if (messages.size() == 0) {
+        if (messages.isEmpty()) {
             return true;
         }
 

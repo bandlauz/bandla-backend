@@ -31,5 +31,5 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
             "where w.id = :id")
     void updateStatusById(@Param("id") Integer id, @Param("status") CompanyStatus status);
 
-    Optional<CompanyEntity> findByAdmin_Id(Integer adminId);
+    Optional<CompanyEntity> findByAdmin(ProfileEntity admin);
 }
