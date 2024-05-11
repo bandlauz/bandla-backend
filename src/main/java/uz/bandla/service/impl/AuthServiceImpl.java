@@ -155,7 +155,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<Response<LoginResponseDTO>> loginWithTelegram(String nonce) {
-        NonceEntity nonceEntity = nonceRepository.getReferenceById(nonce);
+        NonceEntity nonceEntity = nonceRepository.findByIdOrElseThrow(nonce);
         if (!NonceUtil.isValid(nonceEntity) || nonceEntity.getProfile() == null) {
             throw new NotValidException("Nonce not valid");
         }

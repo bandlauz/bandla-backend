@@ -32,7 +32,7 @@ public class PassportDataHandler {
         EncryptedCredentials encryptedCredentials = passportData.getCredentials();
         DecryptedCredentials credentials = decrypt(encryptedCredentials);
 
-        NonceEntity nonceEntity = nonceRepository.getReferenceById(credentials.getNonce());
+        NonceEntity nonceEntity = nonceRepository.findByIdOrElseThrow(credentials.getNonce());
         if (!NonceUtil.isValid(nonceEntity)) {
             throw new NotValidException("Nonce not valid");
         }
