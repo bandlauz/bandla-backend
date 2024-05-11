@@ -29,7 +29,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void confirm(Integer id) {
-        CompanyEntity entity = companyRepository.getReferenceById(id);
+        CompanyEntity entity = companyRepository.findByIdOrElseThrow(id);
         if (entity.getStatus() != CompanyStatus.CREATED) {
             throw new IncorrectStatusException("Company status incorrect");
         }
