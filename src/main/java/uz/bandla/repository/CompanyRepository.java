@@ -1,16 +1,17 @@
 package uz.bandla.repository;
 
-import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.repository.Modifying;
 import uz.bandla.dto.company.response.CompanyDTO;
 import uz.bandla.entity.CompanyEntity;
 import uz.bandla.entity.ProfileEntity;
 import uz.bandla.enums.CompanyStatus;
+import uz.bandla.exp.NotFoundException;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,4 +33,12 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
     void updateStatusById(@Param("id") Integer id, @Param("status") CompanyStatus status);
 
     Optional<CompanyEntity> findByAdmin(ProfileEntity admin);
+
+    default CompanyEntity findByIdOrElseThrow(Integer id) {
+        Optional<CompanyEntity> optional = findById(id);
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Company not found");
+        }
+        return optional.get();
+    }
 }
